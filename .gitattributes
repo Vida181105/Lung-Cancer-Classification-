@@ -1,0 +1,19 @@
+# Git LFS tracking for trained model weights (LESSON 10).
+#
+# Git LFS is NOT installed by default. Before committing any trained model run:
+#
+#     git lfs install
+#     git lfs track "*.keras"        # already declared below
+#
+# If you commit a .keras/.h5 file without LFS installed, it goes into history as
+# a raw blob and cannot be removed without rewriting history.
+*.keras filter=lfs diff=lfs merge=lfs -text
+*.h5    filter=lfs diff=lfs merge=lfs -text
+*.hdf5  filter=lfs diff=lfs merge=lfs -text
+*.pb    filter=lfs diff=lfs merge=lfs -text
+*.tflite filter=lfs diff=lfs merge=lfs -text
+# Keep notebooks and CSVs as normal text so diffs stay readable.
+*.ipynb text
+*.csv   text
+*.md    text
+*.py    text

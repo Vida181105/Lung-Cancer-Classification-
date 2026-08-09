@@ -1,0 +1,44 @@
+# ---------------------------------------------------------------------------
+# Dataset - never committed. On Kaggle it is attached as an input; locally it is
+# downloaded from Kaggle ("Chest CT-Scan images" by Mohamed Hany).
+# ---------------------------------------------------------------------------
+Data/
+data/
+*.zip
+
+# ---------------------------------------------------------------------------
+# Trained weights (LESSON 10)
+# Ignored until `git lfs install` has been run and LFS tracking is confirmed
+# working (`git lfs track` should list *.keras). After that, delete the two
+# lines below to start committing weights through LFS.
+# ---------------------------------------------------------------------------
+models/
+*.keras
+*.h5
+*.hdf5
+
+# ---------------------------------------------------------------------------
+# Generated artefacts. The three results CSVs and the reports ARE tracked
+# (see the negations below) because they are the deliverable.
+# ---------------------------------------------------------------------------
+outputs/figures/*
+outputs/history/*
+outputs/splits/*
+!outputs/figures/.gitkeep
+!outputs/history/.gitkeep
+!outputs/reports/.gitkeep
+!outputs/splits/.gitkeep
+
+# ---------------------------------------------------------------------------
+# Python / Jupyter / OS
+# ---------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+.venv/
+venv/
+env/
+.DS_Store
+.idea/
+.vscode/

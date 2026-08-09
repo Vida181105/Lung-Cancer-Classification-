@@ -1,0 +1,1 @@
+run_name,arch_variant,split_variant,dropout_enabled,dropout_rate,accuracy,f1_macro,cohen_kappa,mcc,epochs_trained,status,notes,timestamp
