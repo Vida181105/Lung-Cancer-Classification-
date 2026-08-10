@@ -8,11 +8,21 @@ attempt:
   consistent result. Every training run in this project is checked, and a
   collapsed run is tagged ``INVALID_collapsed`` instead of being reported as a
   real number.
+* :func:`detect_partial_collapse` (LESSON 11) - the milder failure mode the
+  checks above miss: the model never predicts some classes at all (whole
+  all-zero columns in the confusion matrix) while kappa stays comfortably
+  nonzero. Called from inside :func:`detect_collapse`, so every existing call
+  site gets it for free; tagged ``INVALID_partial_collapse``.
+* :func:`save_predictions` (LESSON 11) - raw per-run ``y_true``/``y_pred``/
+  ``y_prob``, so a diagnostic invented later can be applied to an old run
+  without retraining it. The first partial-collapse round could not do this
+  and had to read confusion matrices out of a markdown report by hand.
 * :func:`record_result` (LESSON 7) - routes a result row to the canonical
   table, the experiment log, or the ablation table, so nobody has to remember
   which CSV a run belongs in.
 """
 
+import json
 from datetime import datetime
 from pathlib import Path
 
@@ -28,9 +38,13 @@ from src.config import (
     COLLAPSE_WINDOW,
     EXPERIMENTS_LOG_CSV,
     FIGURES_DIR,
+    INVALID_TAGS,
+    MIN_PREDICTED_CLASSES,
     NORMAL_CLASS,
     NUM_CLASSES,
     OUTPUT_ROOT,
+    PARTIAL_COLLAPSE_TAG,
+    PREDICTIONS_DIR,
     RESULTS_TABLE_CSV,
     VALID_TAG,
 )
@@ -40,20 +54,69 @@ from src.config import (
 # --------------------------------------------------------------------------
 
 
+def detect_partial_collapse(y_pred, num_classes=NUM_CLASSES,
+                            min_predicted_classes=MIN_PREDICTED_CLASSES) -> dict:
+    """Flag a model that never predicts some of the classes (LESSON 11).
+
+    The full-collapse checks in :func:`detect_collapse` only catch a model that
+    emits *one* class. A model that oscillates between 2 of 4 classes clears
+    every one of them - it is not flat, its kappa is small but nonzero, and it
+    predicts more than one class - yet two whole columns of its confusion
+    matrix are zero and it is just as unreportable. Observed in
+    ``miniconvnet_gap_faithful`` (2 dead columns, kappa ~0.06),
+    ``miniconvnet_flatten_faithful`` (2 dead columns) and
+    ``miniconvnet_flatten_clean`` (1 dead column).
+
+    Returns ``{"partial": bool, "reasons": [...], "details": {...}}``. Note
+    that a single-class prediction set trips this too; :func:`detect_collapse`
+    resolves the precedence so the harsher ``INVALID_collapsed`` tag wins.
+    """
+    reasons, details = [], {}
+    if y_pred is None:
+        return {"partial": False, "reasons": reasons, "details": details}
+
+    y_pred = np.asarray(y_pred).astype(int)
+    counts = np.bincount(y_pred, minlength=num_classes)[:num_classes]
+    predicted = [int(i) for i in np.flatnonzero(counts)]
+    missing = [int(i) for i in range(num_classes) if counts[i] == 0]
+
+    details["n_predicted_classes"] = int(len(predicted))
+    details["predicted_class_counts"] = {CLASS_NAMES[i]: int(counts[i])
+                                         for i in range(num_classes)}
+    details["never_predicted_classes"] = [CLASS_NAMES[i] for i in missing]
+
+    if len(predicted) < min_predicted_classes:
+        reasons.append(
+            f"model never predicts {len(missing)} of {num_classes} classes "
+            f"({', '.join(CLASS_NAMES[i] for i in missing)}) - "
+            f"{len(missing)} all-zero column(s) in the confusion matrix"
+        )
+    return {"partial": len(reasons) > 0, "reasons": reasons, "details": details}
+
+
 def detect_collapse(history=None, kappa=None, mcc=None, y_pred=None,
                     window=COLLAPSE_WINDOW, std_tol=COLLAPSE_STD_TOL,
-                    kappa_tol=COLLAPSE_KAPPA_TOL) -> dict:
+                    kappa_tol=COLLAPSE_KAPPA_TOL,
+                    min_predicted_classes=MIN_PREDICTED_CLASSES) -> dict:
     """Flag a run whose network died instead of learning.
 
-    A run is collapsed if ANY of the following holds:
+    A run is FULLY collapsed (``INVALID_collapsed``) if ANY of the following
+    holds:
 
     1. training loss is flat (std < ``std_tol``) over the trailing ``window``
        epochs, or training accuracy is flat over the same window;
     2. Cohen's kappa or MCC is ~0.0 on evaluation (chance-level agreement);
     3. the model predicts a single class for every test sample.
 
-    Returns ``{"collapsed": bool, "reasons": [...], "details": {...},
-    "status": "ok" | "INVALID_collapsed"}``.
+    A run is PARTIALLY collapsed (``INVALID_partial_collapse``, LESSON 11) if
+    none of the above fires but :func:`detect_partial_collapse` does - i.e. the
+    model predicts some, but not all, of the classes. Full collapse takes
+    precedence, so the two failure modes never blur into one tag.
+
+    Returns ``{"collapsed": bool, "partial_collapse": bool, "reasons": [...],
+    "details": {...}, "status": "ok" | "INVALID_collapsed" |
+    "INVALID_partial_collapse"}``. ``collapsed`` stays True for either failure
+    so existing ``if collapse['collapsed']`` call sites keep working.
     """
     reasons, details = [], {}
 
@@ -90,21 +153,42 @@ def detect_collapse(history=None, kappa=None, mcc=None, y_pred=None,
         if abs(float(mcc)) < kappa_tol:
             reasons.append(f"MCC ~ 0 ({float(mcc):.4f})")
 
+    partial = {"partial": False, "reasons": [], "details": {}}
     if y_pred is not None:
         uniq = np.unique(np.asarray(y_pred))
-        details["n_predicted_classes"] = int(len(uniq))
         if len(uniq) == 1:
             reasons.append(
                 f"model predicts a single class for every sample "
                 f"(class {int(uniq[0])} = {CLASS_NAMES[int(uniq[0])]})"
             )
+        # LESSON 11 - runs the dead-column check on the same predictions, so
+        # every existing detect_collapse() call site is covered without a
+        # second, separately-wired check anywhere in the notebooks.
+        partial = detect_partial_collapse(
+            y_pred, min_predicted_classes=min_predicted_classes)
+        details.update(partial["details"])
 
     collapsed = len(reasons) > 0
+    partial_only = partial["partial"] and not collapsed
+    if partial_only:
+        reasons = list(partial["reasons"])
+
+    if collapsed:
+        status = COLLAPSE_TAG
+    elif partial_only:
+        status = PARTIAL_COLLAPSE_TAG
+    else:
+        status = VALID_TAG
+
     return {
-        "collapsed": collapsed,
+        # True for either failure mode, so `if collapse['collapsed']` guards
+        # written before LESSON 11 still reject a partially collapsed run.
+        "collapsed": collapsed or partial_only,
+        "fully_collapsed": collapsed,
+        "partial_collapse": partial_only,
         "reasons": reasons,
         "details": details,
-        "status": COLLAPSE_TAG if collapsed else VALID_TAG,
+        "status": status,
     }
 
 
@@ -113,7 +197,13 @@ def print_collapse_report(result: dict, run_name=""):
     header = f"COLLAPSE CHECK{' [' + run_name + ']' if run_name else ''}"
     print(header)
     print("-" * len(header))
-    if result["collapsed"]:
+    if result.get("partial_collapse"):
+        print(f"  !!! PARTIALLY COLLAPSED -> status = {result['status']}")
+        for r in result["reasons"]:
+            print(f"      - {r}")
+        print("  The model is only ever choosing between a subset of the "
+              "classes. This run's metrics are NOT a valid result.")
+    elif result["collapsed"]:
         print(f"  !!! COLLAPSED -> status = {result['status']}")
         for r in result["reasons"]:
             print(f"      - {r}")
@@ -143,6 +233,105 @@ def predict(model, dataset):
             "The evaluation dataset must not be shuffled or drop_remainder'd."
         )
     return y_true.astype(int), y_pred.astype(int), y_prob
+
+
+# --------------------------------------------------------------------------
+# Raw prediction persistence (LESSON 11)
+# --------------------------------------------------------------------------
+
+
+def predictions_path(run_name) -> Path:
+    return PREDICTIONS_DIR / f"{run_name}_predictions.csv"
+
+
+def save_predictions(run_name, y_true, y_pred, y_prob=None, meta=None) -> Path:
+    """Persist one run's raw per-sample predictions.
+
+    Aggregate metrics are not enough: the partial-collapse check (LESSON 11)
+    was written *after* the first full training round, and because only metrics
+    had been saved, every existing run had to be re-inspected by hand through
+    ``comparison.md``. Anything derived from ``y_true``/``y_pred``/``y_prob`` -
+    a confusion matrix, a new collapse rule, a per-class breakdown - can be
+    recomputed from this file without retraining.
+
+    Writes ``outputs/predictions/<run_name>_predictions.csv`` (one row per
+    evaluation sample) plus a small ``..._predictions_meta.json`` sidecar.
+    """
+    PREDICTIONS_DIR.mkdir(parents=True, exist_ok=True)
+    y_true = np.asarray(y_true).astype(int)
+    y_pred = np.asarray(y_pred).astype(int)
+
+    frame = {"y_true": y_true, "y_pred": y_pred}
+    if y_prob is not None:
+        y_prob = np.asarray(y_prob, dtype=float)
+        for i in range(min(y_prob.shape[1], NUM_CLASSES)):
+            frame[f"prob_{CLASS_NAMES[i]}"] = y_prob[:, i]
+
+    path = predictions_path(run_name)
+    pd.DataFrame(frame).to_csv(path, index=False)
+
+    sidecar = dict(meta or {})
+    sidecar.update({
+        "run_name": run_name,
+        "n_samples": int(len(y_true)),
+        "class_names": CLASS_NAMES,
+        "saved_at": datetime.now().isoformat(timespec="seconds"),
+    })
+    with open(PREDICTIONS_DIR / f"{run_name}_predictions_meta.json", "w") as fh:
+        json.dump(sidecar, fh, indent=2)
+    return path
+
+
+def load_predictions(run_name):
+    """Return ``(y_true, y_pred, y_prob or None)`` for a saved run."""
+    path = predictions_path(run_name)
+    if not path.exists():
+        raise FileNotFoundError(
+            f"{path} not found. Predictions are only saved for runs trained "
+            "after LESSON 11 was added - re-run that notebook to produce them."
+        )
+    df = pd.read_csv(path)
+    prob_cols = [c for c in df.columns if c.startswith("prob_")]
+    y_prob = df[prob_cols].to_numpy(dtype=float) if prob_cols else None
+    return (df["y_true"].to_numpy(int), df["y_pred"].to_numpy(int), y_prob)
+
+
+def list_saved_predictions():
+    """Run names that have raw predictions on disk."""
+    if not PREDICTIONS_DIR.exists():
+        return []
+    return sorted(p.name[: -len("_predictions.csv")]
+                  for p in PREDICTIONS_DIR.glob("*_predictions.csv"))
+
+
+def recheck_saved_predictions(run_names=None, verbose=True) -> pd.DataFrame:
+    """Re-run collapse detection over already-saved predictions (LESSON 11).
+
+    This is the cheap path: when the detector gains a new rule, apply it to
+    every run that has raw predictions on disk instead of retraining. Returns
+    one row per run with the recomputed status and the accuracy/kappa recomputed
+    from the same file, so a changed status can be traced back to real numbers.
+    """
+    rows = []
+    for run_name in (run_names if run_names is not None
+                     else list_saved_predictions()):
+        y_true, y_pred, y_prob = load_predictions(run_name)
+        metrics = compute_metrics(y_true, y_pred, y_prob)
+        collapse = detect_collapse(kappa=metrics["cohen_kappa"],
+                                   mcc=metrics["mcc"], y_pred=y_pred)
+        if verbose:
+            print_collapse_report(collapse, run_name)
+            print()
+        rows.append({
+            "run_name": run_name,
+            "accuracy": round(metrics["accuracy"], 6),
+            "cohen_kappa": round(metrics["cohen_kappa"], 6),
+            "n_predicted_classes": collapse["details"].get("n_predicted_classes"),
+            "never_predicted_classes": ", ".join(
+                collapse["details"].get("never_predicted_classes", [])),
+            "status": collapse["status"],
+        })
+    return pd.DataFrame(rows)
 
 
 def compute_metrics(y_true, y_pred, y_prob=None) -> dict:
@@ -484,7 +673,8 @@ def load_results(kind="canonical") -> pd.DataFrame:
 
 
 def valid_only(df: pd.DataFrame) -> pd.DataFrame:
-    """Drop rows tagged ``INVALID_collapsed`` before ranking or plotting."""
+    """Drop rows tagged ``INVALID_collapsed`` or ``INVALID_partial_collapse``
+    before ranking or plotting."""
     if "status" not in df.columns or df.empty:
         return df
-    return df[df["status"].astype(str) != COLLAPSE_TAG]
+    return df[~df["status"].astype(str).isin(INVALID_TAGS)]

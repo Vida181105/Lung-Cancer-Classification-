@@ -240,6 +240,92 @@ def final_epoch_summary(history):
     return out
 
 
+# --------------------------------------------------------------------------
+# Model file size on disk (LESSON 2 - the "~6MB" claim)
+# --------------------------------------------------------------------------
+
+
+def measure_model_file_sizes(model, run_name="size_check", keep_files=True,
+                             verbose=True) -> dict:
+    """Save one model both ways and measure what each file actually costs.
+
+    The paper states "~0.5M parameters, ~6MB", but 499,476 float32 weights is
+    only ~1.9MB. Adam carries two extra buffers per parameter (momentum and
+    variance), so a checkpoint that includes the optimizer state should land
+    near 3x the weight size. This measures both instead of arguing about it:
+
+    * ``model.save_weights(...)`` - weights only;
+    * ``model.save(...)``         - Keras's default, which also serialises the
+      optimizer (and therefore its slot variables, once they exist).
+
+    The optimizer slots are created lazily, so a model that has never taken a
+    training step has no momentum/variance buffers to save. Train (or at least
+    ``fit`` for one step on a handful of samples) before calling this, or the
+    two numbers will come out nearly identical for the wrong reason.
+
+    Returns the two paths and their sizes in bytes and MB, alongside the
+    arithmetic prediction, so the hypothesis can be confirmed or refuted.
+    """
+    MODELS_DIR.mkdir(parents=True, exist_ok=True)
+    weights_path = MODELS_DIR / f"{run_name}_weights_only.weights.h5"
+    full_path = MODELS_DIR / f"{run_name}_full_with_optimizer.keras"
+
+    model.save_weights(str(weights_path))
+    model.save(str(full_path))
+
+    n_params = int(model.count_params())
+    weights_bytes = weights_path.stat().st_size
+    full_bytes = full_path.stat().st_size
+    mb = 1024 ** 2
+
+    optimizer_slots = 0
+    try:
+        opt_vars = getattr(model.optimizer, "variables", None)
+        opt_vars = opt_vars() if callable(opt_vars) else opt_vars
+        optimizer_slots = int(sum(int(np.prod(tuple(v.shape))) for v in opt_vars))
+    except Exception:                       # never let a probe break the check
+        optimizer_slots = 0
+
+    out = {
+        "run_name": run_name,
+        "total_params": n_params,
+        "weights_only_path": str(weights_path),
+        "weights_only_bytes": int(weights_bytes),
+        "weights_only_MB": round(weights_bytes / mb, 3),
+        "full_save_path": str(full_path),
+        "full_save_bytes": int(full_bytes),
+        "full_save_MB": round(full_bytes / mb, 3),
+        "ratio_full_over_weights": round(full_bytes / max(weights_bytes, 1), 3),
+        # Arithmetic the hypothesis rests on.
+        "predicted_weights_MB_float32": round(n_params * 4 / mb, 3),
+        "predicted_weights_plus_adam_MB": round(n_params * 4 * 3 / mb, 3),
+        "optimizer_slot_scalars_found": optimizer_slots,
+    }
+
+    if verbose:
+        print("MODEL FILE SIZE CHECK -", run_name)
+        print("-" * 40)
+        print(f"  parameters                     : {n_params:,}")
+        print(f"  save_weights() -> {weights_path.name}")
+        print(f"      {weights_bytes:,} bytes = {out['weights_only_MB']} MB")
+        print(f"  save()         -> {full_path.name}")
+        print(f"      {full_bytes:,} bytes = {out['full_save_MB']} MB")
+        print(f"  ratio full/weights             : {out['ratio_full_over_weights']}")
+        print(f"  predicted weights only (4B/p)  : "
+              f"{out['predicted_weights_MB_float32']} MB")
+        print(f"  predicted weights + Adam (12B/p): "
+              f"{out['predicted_weights_plus_adam_MB']} MB")
+        print(f"  optimizer slot scalars found   : {optimizer_slots:,}"
+              + ("  <- 0 means the model never trained; sizes are not"
+                 " comparable" if optimizer_slots == 0 else ""))
+        print(f"  paper's claim                  : ~6 MB")
+
+    if not keep_files:
+        weights_path.unlink(missing_ok=True)
+        full_path.unlink(missing_ok=True)
+    return out
+
+
 def run_name_for(model_key, arch_variant=None, split_variant=None, suffix=None):
     """Consistent run naming so history/checkpoint/figure files line up."""
     parts = [model_key]

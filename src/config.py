@@ -68,6 +68,15 @@ GAP_DENSE_UNITS = 64                      # GAP head  -> ~106K total params
 FLATTEN_DENSE_UNITS = 16                  # Flatten head -> ~0.5M total params
 DROPOUT_RATE = 0.5
 
+# LESSON 11 (fallback fix): 'relu' is the faithful reading of the paper and
+# stays the default. 'leaky_relu' is the documented fallback for a run that
+# still partially collapses under Adam(1e-4, clipnorm=1.0) - a dying-ReLU unit
+# has zero gradient forever, while a leaky unit can recover. Switching this
+# adds no parameters, so the parameter budget is unchanged. Log any run that
+# uses it with a config_note.
+MINICONVNET_ACTIVATION = "relu"           # 'relu' | 'leaky_relu'
+LEAKY_RELU_ALPHA = 0.1
+
 # --------------------------------------------------------------------------
 # Optimisation
 # --------------------------------------------------------------------------
@@ -104,6 +113,18 @@ COLLAPSE_KAPPA_TOL = 0.02   # |kappa| or |MCC| below this == degenerate
 COLLAPSE_TAG = "INVALID_collapsed"
 VALID_TAG = "ok"
 
+# LESSON 11: partial collapse. A run can predict 2 of 4 classes and still have
+# a nonzero kappa, so none of the checks above fire - see the confusion matrix
+# for miniconvnet_gap_faithful, which has two all-zero columns at kappa ~0.06.
+# A run is partially collapsed when it never predicts every class at least
+# once on the evaluation set. Tagged distinctly so the two failure modes stay
+# separable in the results tables.
+PARTIAL_COLLAPSE_TAG = "INVALID_partial_collapse"
+MIN_PREDICTED_CLASSES = NUM_CLASSES   # every class must be predicted >=1 time
+
+# Statuses that disqualify a row from being reported / averaged.
+INVALID_TAGS = (COLLAPSE_TAG, PARTIAL_COLLAPSE_TAG)
+
 # --------------------------------------------------------------------------
 # Paths
 # --------------------------------------------------------------------------
@@ -125,6 +146,9 @@ FIGURES_DIR = OUTPUT_ROOT / "figures"
 HISTORY_DIR = OUTPUT_ROOT / "history"
 REPORTS_DIR = OUTPUT_ROOT / "reports"
 SPLITS_DIR = OUTPUT_ROOT / "splits"
+# LESSON 11: raw per-run predictions, so a new diagnostic can be applied to an
+# old run without retraining it.
+PREDICTIONS_DIR = OUTPUT_ROOT / "predictions"
 
 RESULTS_TABLE_CSV = OUTPUT_ROOT / "results_table.csv"
 EXPERIMENTS_LOG_CSV = OUTPUT_ROOT / "experiments_log.csv"
@@ -138,7 +162,7 @@ IMAGE_EXTENSIONS = (".png", ".jpg", ".jpeg", ".bmp", ".tif", ".tiff")
 def ensure_dirs():
     """Create every output directory. Safe to call repeatedly."""
     for d in (OUTPUT_ROOT, FIGURES_DIR, HISTORY_DIR, REPORTS_DIR, SPLITS_DIR,
-              MODELS_DIR):
+              PREDICTIONS_DIR, MODELS_DIR):
         d.mkdir(parents=True, exist_ok=True)
     return {
         "OUTPUT_ROOT": str(OUTPUT_ROOT),
@@ -146,6 +170,7 @@ def ensure_dirs():
         "HISTORY_DIR": str(HISTORY_DIR),
         "REPORTS_DIR": str(REPORTS_DIR),
         "SPLITS_DIR": str(SPLITS_DIR),
+        "PREDICTIONS_DIR": str(PREDICTIONS_DIR),
         "MODELS_DIR": str(MODELS_DIR),
     }
 

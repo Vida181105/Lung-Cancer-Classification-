@@ -73,6 +73,34 @@ parameter count, not on file size. Worth mentioning when you discuss the ambigui
 
 **Both are trained and both are reported.** Neither is silently picked.
 
+#### 2a. Where the paper's "~6 MB" comes from — measured, not assumed
+
+The arithmetic behind the hypothesis: Adam carries two extra buffers per parameter (momentum and
+variance), so a checkpoint saved *with the optimizer* costs ~3× the weights.
+
+| quantity | value |
+|---|---|
+| `flatten` parameters | 499,476 |
+| weights only, float32 (4 B/param) | ~1.91 MB |
+| weights + Adam state (12 B/param) | ~5.72 MB |
+| paper's stated size | ~6 MB |
+
+Keras's default `model.save()` serialises the optimizer; `model.save_weights()` does not. So the
+paper's figure is consistent with a default `save()`, and inconsistent with weights alone.
+
+**This is measured, not argued.** `train_utils.measure_model_file_sizes()` saves the same trained
+model both ways and prints the two file sizes; notebook 02 calls it on run B (the `flatten` variant)
+right after training, and prints a CONFIRMED / REFUTED verdict against the ~6 MB claim. It requires a
+model that has actually trained — Adam's slot variables are created lazily, so an untrained model has
+no optimizer state to save and both files would come out the same size for the wrong reason. The
+printout's `optimizer_slot_scalars_found` is the guard against reporting that mistake as a result.
+
+> **[CHOICE] Measured numbers pending.** The check is wired up but has not yet been executed on a
+> trained model. Run notebook 02 through run B, then replace this note with the two printed sizes
+> — `save_weights()` = _ MB, `save()` = _ MB — and state plainly whether they confirm or refute the
+> optimizer-state explanation. Do not paraphrase or round the numbers from the arithmetic above;
+> only the measured file sizes settle it.
+
 ### 3. Always run automatic collapse detection
 
 Never trust a raw accuracy number without it. A dead network with a frozen output looks
@@ -88,6 +116,9 @@ consistent result.
 Any flagged run is written to the results CSVs with `status = INVALID_collapsed` instead of
 being reported as a real number. This is applied to **every** MiniConvNet run, both
 architecture variants, every CV fold, both ablation arms and every baseline.
+
+These three checks are necessary but not sufficient — see **lesson 11** for the milder failure they
+miss.
 
 ### 4. The dataset has known train/test leakage
 
@@ -162,6 +193,59 @@ declares LFS tracking for model files, and `models/` is git-ignored until LFS is
 working. **Run `git lfs install` before committing any trained model**, then remove the
 `models/` lines from [`.gitignore`](.gitignore).
 
+### 11. A model can collapse *partially* — and that passes every check in lesson 3
+
+Found by reading the raw confusion matrices in `outputs/reports/comparison.md` by hand, after the
+first full training round had already reported every run as `ok`:
+
+```
+miniconvnet_gap_faithful           kappa 0.0617, status "ok"
+[[33  0 87  0]
+ [22  0 29  0]
+ [ 0  0 54  0]
+ [31  0 59  0]]
+     ^     ^  two all-zero COLUMNS: classes the model never predicts, at all
+```
+
+The model is only ever choosing between 2 of the 4 classes. It is not flat, its kappa is small but
+comfortably nonzero, and it predicts more than one class — so **none** of lesson 3's three checks
+fire, and a broken model is logged as a real, merely-weak result. The same pattern appears in
+`miniconvnet_flatten_faithful` (2 dead columns) and `miniconvnet_flatten_clean` (1 dead column).
+
+**Fix**: [`src/evaluate_utils.py`](src/evaluate_utils.py) → `detect_partial_collapse()` counts the
+distinct classes ever predicted on the evaluation set and flags the run if that is fewer than
+`NUM_CLASSES`. It is called **from inside `detect_collapse()`**, so every existing call site — all
+four notebook-02 runs, both ablation arms, all ten CV folds, every baseline, and the checkpoint
+re-scoring in notebook 06 — is covered, with no second check wired separately anywhere.
+
+| status | meaning |
+|---|---|
+| `ok` | reportable |
+| `INVALID_collapsed` | flat curve, kappa/MCC ~0, or a single predicted class |
+| `INVALID_partial_collapse` | predicts some but not all classes; can occur at clearly nonzero kappa |
+
+The two tags are kept **distinct** so the failure modes stay separable in the results tables;
+`valid_only()` and the CV "exclude collapsed folds" rule reject both.
+
+**Fix, second half — save the raw predictions.** This check could not be applied to the existing runs
+because only aggregate metrics had been saved, so confirming it meant re-reading confusion matrices
+out of a markdown report. Every training notebook now calls `evaluate_utils.save_predictions()`,
+writing one small CSV per run to `outputs/predictions/` (tracked in git — it is evidence, not
+clutter). `recheck_saved_predictions()` re-applies the current detector to all of them in seconds,
+with no retraining. **Any new diagnostic should be applied through that path first.**
+
+**Fallback if a re-run still collapses partially**: a ReLU unit whose pre-activation is negative for
+every input has exactly zero gradient and never recovers; enough dead units in the `flatten` head's
+narrow `Dense(16)` layers makes whole classes unreachable. Set
+`MINICONVNET_ACTIVATION = 'leaky_relu'` in [`src/config.py`](src/config.py) (alpha 0.1, applied to
+both backbone and head, **zero change to the parameter count**), restart the kernel, and re-run once.
+
+> **[CHOICE] `relu` remains the default.** It is the faithful reading of the paper, and the
+> replication's headline numbers must come from the faithful architecture. `leaky_relu` is a
+> documented, opt-in remedy for a specific diagnosed failure — not a free accuracy knob. Do not run
+> both and report the better one; any run using it carries `activation=leaky_relu` in its
+> `notes` / `config_note`.
+
 ---
 
 ## Repository layout
@@ -178,14 +262,14 @@ working. **Run `git lfs install` before committing any trained model**, then rem
 │   ├── config.py                      hyperparameters, seeds, class order, paths
 │   ├── data_utils.py                  resolve_data_root, indexing, leakage audit, splits, tf.data
 │   ├── models.py                      build_miniconvnet_gap / _flatten, baseline builders
-│   ├── train_utils.py                 compile_model (clipnorm default), class weights, callbacks
-│   └── evaluate_utils.py              detect_collapse, metrics, confusion matrices, results routing
+│   ├── train_utils.py                 compile_model (clipnorm default), class weights, callbacks, model-size check
+│   └── evaluate_utils.py              detect_collapse (+ partial), saved predictions, metrics, confusion matrices, results routing
 ├── notebooks/
 │   ├── 00_dataset_audit.ipynb         class counts, duplicate/leakage detection, writes both splits
 │   ├── 01_preprocessing_check.ipynb   resize/scale/augmentation checks, sample images, leakage re-check
-│   ├── 02_train_miniconvnet.ipynb     2 architectures × 2 splits = 4 runs, all collapse-checked
+│   ├── 02_train_miniconvnet.ipynb     2 architectures × 2 splits = 4 runs, all collapse-checked; + model file-size check (LESSON 2a)
 │   ├── 03_ablation_dropout.ipynb      dropout on vs off, full epoch budget
-│   ├── 04_cross_validation.ipynb      5-fold CV, both architectures → canonical MiniConvNet rows
+│   ├── 04_cross_validation.ipynb      5-fold CV, both architectures → canonical MiniConvNet rows; §3b prints the re-run cost first
 │   ├── 05_train_baselines.ipynb       ResNet50, VGG16, MobileNetV3Small, EfficientNetV2B0 (+ optional extended set)
 │   ├── 06_evaluate_and_compare.ipynb  results tables, confusion matrices, paper comparison
 │   └── 07_gradcam_optional.ipynb      optional extension — skip if short on time
@@ -193,6 +277,7 @@ working. **Run `git lfs install` before committing any trained model**, then rem
 └── outputs/
     ├── figures/                       history curves, confusion matrices, comparison plots
     ├── history/                       per-run history JSON + per-epoch CSV
+    ├── predictions/                   per-run raw y_true/y_pred/y_prob (LESSON 11; tracked in git)
     ├── reports/                       dataset_audit.md, comparison.md
     ├── splits/                        faithful_split.csv, clean_split.csv
     ├── results_table.csv              one row per model (canonical)
@@ -259,6 +344,16 @@ places because of `resolve_data_root()`.
 
 *All tables below are empty templates. Fill them from the generated CSVs after running the
 notebooks — do not hand-write numbers that the pipeline did not produce.*
+
+> **Current state of `outputs/` (as of the lesson-11 fix).** The CSVs and `comparison.md` in
+> `outputs/` hold results from the training round that ran *before* partial-collapse detection
+> existed, so several rows carry `status = ok` that the current detector would reject — at minimum
+> `miniconvnet_gap_faithful`, `miniconvnet_flatten_faithful` and `miniconvnet_flatten_clean`, whose
+> confusion matrices have all-zero columns. **Those files have deliberately not been hand-edited**;
+> they will be overwritten by the corrected pipeline on the next run and nothing is to be corrected
+> by typing. The dropout ablation (notebook 03) is the first thing to re-run; the CV folds
+> (notebook 04) could not be checked without a re-run because that round saved no per-fold
+> predictions — notebook 04 §3b now reports that and estimates the cost before anything starts.
 
 ### Main comparison — `outputs/results_table.csv`
 

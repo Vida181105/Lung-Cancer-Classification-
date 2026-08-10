@@ -25,10 +25,43 @@ from src.config import (
     FLATTEN_DENSE_UNITS,
     GAP_DENSE_UNITS,
     IMG_SHAPE,
+    LEAKY_RELU_ALPHA,
+    MINICONVNET_ACTIVATION,
     MINICONVNET_FILTERS,
     NUM_CLASSES,
     SEED,
 )
+
+
+def _activation_layer(activation, name):
+    """ReLU (paper-faithful default) or LeakyReLU (LESSON 11 fallback).
+
+    Returns ``None`` when the activation can be folded into the ``Conv2D``/
+    ``Dense`` layer itself, so the ReLU path builds exactly the same graph it
+    did before this option existed. Neither choice adds parameters.
+    """
+    if activation in (None, "relu"):
+        return None
+    if activation == "leaky_relu":
+        try:                      # Keras 3
+            return layers.LeakyReLU(negative_slope=LEAKY_RELU_ALPHA, name=name)
+        except TypeError:         # tf.keras <= 2.15 spells it 'alpha'
+            return layers.LeakyReLU(alpha=LEAKY_RELU_ALPHA, name=name)
+    raise ValueError(f"Unknown activation '{activation}'. "
+                     "Expected 'relu' or 'leaky_relu'.")
+
+
+def _dense_block(x, units, activation, name):
+    """Dense + activation, keeping the ReLU path a single fused layer.
+
+    The narrow ``Dense(16)`` layers of the flatten head are where a dead unit
+    costs the most - lose a few of 16 and whole classes become unreachable,
+    which is exactly the partial collapse of LESSON 11.
+    """
+    act = _activation_layer(activation, name=f"{name}_act")
+    x = layers.Dense(units, activation=None if act is not None else "relu",
+                     name=name)(x)
+    return act(x) if act is not None else x
 
 # --------------------------------------------------------------------------
 # MiniConvNet
@@ -36,19 +69,29 @@ from src.config import (
 
 
 def _miniconvnet_backbone(inputs, filters=MINICONVNET_FILTERS,
-                          use_batchnorm=False):
+                          use_batchnorm=False,
+                          activation=MINICONVNET_ACTIVATION):
     """Conv/Pool stack shared by both head variants.
 
     ``use_batchnorm`` defaults to False to keep the parameter count matching
     the paper's reconstruction; enable it only as a deliberate experiment
     (log it as such in experiments_log.csv).
+
+    ``activation`` defaults to ``'relu'`` (the paper's reading). Pass
+    ``'leaky_relu'`` as the LESSON 11 fallback for a run that still collapses
+    partially - dead ReLU units have zero gradient forever, leaky ones can
+    recover. The parameter count is identical either way.
     """
+    act = _activation_layer(activation, name="act0")
     x = layers.Rescaling(1.0 / 255, name="rescale")(inputs)
     for i, f in enumerate(filters, start=1):
-        x = layers.Conv2D(f, 3, padding="same", activation="relu",
+        x = layers.Conv2D(f, 3, padding="same",
+                          activation=None if act is not None else "relu",
                           name=f"conv{i}")(x)
         if use_batchnorm:
             x = layers.BatchNormalization(name=f"bn{i}")(x)
+        if act is not None:
+            x = _activation_layer(activation, name=f"act{i}")(x)
         x = layers.MaxPooling2D(2, name=f"pool{i}")(x)
     return x
 
@@ -57,15 +100,16 @@ def build_miniconvnet_gap(num_classes=NUM_CLASSES, input_shape=IMG_SHAPE,
                           dropout_rate=DROPOUT_RATE,
                           dense_units=GAP_DENSE_UNITS,
                           filters=MINICONVNET_FILTERS, use_batchnorm=False,
+                          activation=MINICONVNET_ACTIVATION,
                           name="miniconvnet_gap"):
     """GAP-head variant: GAP -> Dense(64) -> Dropout -> Dense(4).
 
     ~106K parameters - i.e. it does NOT reach the paper's stated ~0.5M.
     """
     inputs = layers.Input(shape=input_shape, name="input")
-    x = _miniconvnet_backbone(inputs, filters, use_batchnorm)
+    x = _miniconvnet_backbone(inputs, filters, use_batchnorm, activation)
     x = layers.GlobalAveragePooling2D(name="gap")(x)
-    x = layers.Dense(dense_units, activation="relu", name="dense_1")(x)
+    x = _dense_block(x, dense_units, activation, "dense_1")
     if dropout_rate and dropout_rate > 0:
         x = layers.Dropout(dropout_rate, seed=SEED, name="dropout_1")(x)
     outputs = layers.Dense(num_classes, activation="softmax", name="predictions")(x)
@@ -76,6 +120,7 @@ def build_miniconvnet_flatten(num_classes=NUM_CLASSES, input_shape=IMG_SHAPE,
                               dropout_rate=DROPOUT_RATE,
                               dense_units=FLATTEN_DENSE_UNITS,
                               filters=MINICONVNET_FILTERS, use_batchnorm=False,
+                              activation=MINICONVNET_ACTIVATION,
                               name="miniconvnet_flatten"):
     """Flatten-head variant: Flatten(25088) -> Dense(16) x3 -> Dense(4).
 
@@ -83,13 +128,13 @@ def build_miniconvnet_flatten(num_classes=NUM_CLASSES, input_shape=IMG_SHAPE,
     first (by far the largest) dense layer.
     """
     inputs = layers.Input(shape=input_shape, name="input")
-    x = _miniconvnet_backbone(inputs, filters, use_batchnorm)
+    x = _miniconvnet_backbone(inputs, filters, use_batchnorm, activation)
     x = layers.Flatten(name="flatten")(x)
-    x = layers.Dense(dense_units, activation="relu", name="dense_1")(x)
+    x = _dense_block(x, dense_units, activation, "dense_1")
     if dropout_rate and dropout_rate > 0:
         x = layers.Dropout(dropout_rate, seed=SEED, name="dropout_1")(x)
-    x = layers.Dense(dense_units, activation="relu", name="dense_2")(x)
-    x = layers.Dense(dense_units, activation="relu", name="dense_3")(x)
+    x = _dense_block(x, dense_units, activation, "dense_2")
+    x = _dense_block(x, dense_units, activation, "dense_3")
     outputs = layers.Dense(num_classes, activation="softmax", name="predictions")(x)
     return Model(inputs, outputs, name=name)
 
