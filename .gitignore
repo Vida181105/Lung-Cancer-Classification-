@@ -42,3 +42,10 @@ env/
 .DS_Store
 .idea/
 .vscode/
+
+# Local WSL virtual environment
+.venv-wsl/
+
+# Shared libraries / binary files
+*.so
+*.so*

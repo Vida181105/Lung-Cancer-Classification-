@@ -1,1 +1,15 @@
 model,arch_variant,split_variant,params,accuracy,accuracy_std,precision_macro,recall_macro,f1_macro,cohen_kappa,mcc,auc_macro,epochs_trained,n_runs,status,notes,timestamp,config_note
+miniconvnet_gap_faithful,gap,faithful,105956.0,0.27619,,0.154882,0.31875,0.175503,0.061655,0.089105,0.712315,30,1,ok,binary_tumor_acc=0.4444; subtype_acc=0.1264,2026-08-09T21:01:24,"GAP head, faithful split, single run, Adam(1e-4, clipnorm=1.0)"
+miniconvnet_flatten_faithful,flatten,faithful,499476.0,0.295238,,0.159619,0.33125,0.188982,0.074376,0.101277,0.714923,36,1,ok,binary_tumor_acc=0.4921; subtype_acc=0.1494,2026-08-09T21:03:35,"Flatten head (~0.5M params, paper-sized), faithful split, single run"
+miniconvnet_gap_clean,gap,clean,105956.0,0.505882,,0.412588,0.554581,0.47147,0.270871,0.2863,0.731572,46,1,ok,binary_tumor_acc=0.9647; subtype_acc=0.4650,2026-08-09T21:06:15,"GAP head, CLEAN split (deduplicated, leakage-free) - robustness experiment, NOT a paper replication; class weights on"
+miniconvnet_flatten_clean,flatten,clean,499476.0,0.323529,,0.144712,0.281965,0.184815,0.053727,0.076899,0.473872,16,1,ok,binary_tumor_acc=0.9235; subtype_acc=0.3503,2026-08-09T21:07:22,"Flatten head, CLEAN split (deduplicated, leakage-free) - robustness experiment, NOT a paper replication; class weights on"
+cv_gap_faithful_fold1,gap,faithful,,0.525,,0.348359,0.465116,0.376221,0.305302,0.43848,0.695506,18,1,ok,,2026-08-10T11:19:37,CV fold 1/5 on the faithful split
+cv_gap_faithful_fold2,gap,faithful,,0.53,,0.397087,0.486143,0.392629,0.328811,0.388181,0.758725,34,1,ok,,2026-08-10T11:19:37,CV fold 2/5 on the faithful split
+cv_gap_faithful_fold3,gap,faithful,,0.53,,0.32,0.481618,0.375678,0.320072,0.421042,0.7738,24,1,ok,,2026-08-10T11:19:37,CV fold 3/5 on the faithful split
+cv_gap_faithful_fold4,gap,faithful,,0.565,,0.423954,0.52411,0.442889,0.388873,0.427891,0.771032,40,1,ok,,2026-08-10T11:19:37,CV fold 4/5 on the faithful split
+cv_gap_faithful_fold5,gap,faithful,,0.465,,0.254433,0.436567,0.320455,0.24135,0.296843,0.762554,44,1,ok,,2026-08-10T11:19:37,CV fold 5/5 on the faithful split
+cv_flatten_faithful_fold1,flatten,faithful,,0.49,,0.296057,0.435106,0.340119,0.258856,0.3515,0.784291,24,1,ok,,2026-08-10T11:19:37,CV fold 1/5 on the faithful split
+cv_flatten_faithful_fold2,flatten,faithful,,0.525,,0.311667,0.473666,0.367219,0.312839,0.411527,0.773812,29,1,ok,,2026-08-10T11:19:37,CV fold 2/5 on the faithful split
+cv_flatten_faithful_fold3,flatten,faithful,,0.43,,0.24233,0.378163,0.287746,0.174661,0.231113,0.633239,22,1,ok,,2026-08-10T11:19:37,CV fold 3/5 on the faithful split
+cv_flatten_faithful_fold4,flatten,faithful,,0.565,,0.445652,0.531059,0.48349,0.392967,0.409085,0.768703,25,1,ok,,2026-08-10T11:19:37,CV fold 4/5 on the faithful split
+cv_flatten_faithful_fold5,flatten,faithful,,0.515,,0.334375,0.461385,0.368266,0.296081,0.419828,0.804921,35,1,ok,,2026-08-10T11:19:37,CV fold 5/5 on the faithful split
