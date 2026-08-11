@@ -1,0 +1,14 @@
+{
+  "arch_variant": "gap",
+  "split_variant": "faithful",
+  "source": "rescored from checkpoint in notebook 06",
+  "run_name": "miniconvnet_gap_faithful",
+  "n_samples": 315,
+  "class_names": [
+    "adenocarcinoma",
+    "large.cell.carcinoma",
+    "normal",
+    "squamous.cell.carcinoma"
+  ],
+  "saved_at": "2026-08-10T22:12:33"
+}

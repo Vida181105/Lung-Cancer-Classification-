@@ -1,0 +1,14 @@
+{
+  "arch_variant": "flatten",
+  "split_variant": "clean",
+  "source": "rescored from checkpoint in notebook 06",
+  "run_name": "miniconvnet_flatten_clean",
+  "n_samples": 170,
+  "class_names": [
+    "adenocarcinoma",
+    "large.cell.carcinoma",
+    "normal",
+    "squamous.cell.carcinoma"
+  ],
+  "saved_at": "2026-08-10T22:12:42"
+}
