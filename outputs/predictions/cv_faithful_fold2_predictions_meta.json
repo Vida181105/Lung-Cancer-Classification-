@@ -1,0 +1,15 @@
+{
+  "split_variant": "faithful",
+  "fold": 2,
+  "activation": "leaky_relu",
+  "label_smoothing": 0.05,
+  "run_name": "cv_faithful_fold2",
+  "n_samples": 333,
+  "class_names": [
+    "adenocarcinoma",
+    "large.cell.carcinoma",
+    "normal",
+    "squamous.cell.carcinoma"
+  ],
+  "saved_at": "2026-08-11T14:05:52"
+}

@@ -1,0 +1,13 @@
+{
+  "split_variant": "faithful",
+  "source": "pooled over 3 CV folds",
+  "run_name": "cv_faithful_pooled",
+  "n_samples": 1000,
+  "class_names": [
+    "adenocarcinoma",
+    "large.cell.carcinoma",
+    "normal",
+    "squamous.cell.carcinoma"
+  ],
+  "saved_at": "2026-08-11T14:07:33"
+}

@@ -1,0 +1,16 @@
+{
+  "split_variant": "clean",
+  "config_note": "v3 MiniConvNet ~499K, CLEAN split (deduplicated, leakage-free) - robustness experiment, NOT a paper replication; class weights on; same anti-collapse settings as the faithful run",
+  "activation": "leaky_relu",
+  "label_smoothing": 0.05,
+  "dropout_rate": 0.5,
+  "run_name": "miniconvnet_clean",
+  "n_samples": 170,
+  "class_names": [
+    "adenocarcinoma",
+    "large.cell.carcinoma",
+    "normal",
+    "squamous.cell.carcinoma"
+  ],
+  "saved_at": "2026-08-11T13:57:49"
+}

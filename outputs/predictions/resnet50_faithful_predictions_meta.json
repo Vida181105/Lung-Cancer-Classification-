@@ -1,0 +1,14 @@
+{
+  "split_variant": "faithful",
+  "baseline": "ResNet50",
+  "protocol": "frozen backbone, head-only training",
+  "run_name": "resnet50_faithful",
+  "n_samples": 315,
+  "class_names": [
+    "adenocarcinoma",
+    "large.cell.carcinoma",
+    "normal",
+    "squamous.cell.carcinoma"
+  ],
+  "saved_at": "2026-08-11T15:16:29"
+}

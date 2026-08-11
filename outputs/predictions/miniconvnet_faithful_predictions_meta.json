@@ -1,0 +1,16 @@
+{
+  "split_variant": "faithful",
+  "config_note": "v3 MiniConvNet ~499K, faithful split, single run; LeakyReLU(0.1) + he_normal + Dense(64) bottleneck + label_smoothing=0.05 + ReduceLROnPlateau + Adam(1e-4, clipnorm=1.0)",
+  "activation": "leaky_relu",
+  "label_smoothing": 0.05,
+  "dropout_rate": 0.5,
+  "run_name": "miniconvnet_faithful",
+  "n_samples": 315,
+  "class_names": [
+    "adenocarcinoma",
+    "large.cell.carcinoma",
+    "normal",
+    "squamous.cell.carcinoma"
+  ],
+  "saved_at": "2026-08-11T13:54:52"
+}
