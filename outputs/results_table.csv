@@ -1,0 +1,1 @@
+model,arch_variant,split_variant,params,accuracy,accuracy_std,precision_macro,recall_macro,f1_macro,cohen_kappa,mcc,auc_macro,binary_tumor_acc,subtype_acc,epochs_trained,n_runs,status,notes,timestamp

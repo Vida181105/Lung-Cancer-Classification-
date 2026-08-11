@@ -7,7 +7,7 @@ data/
 *.zip
 
 # ---------------------------------------------------------------------------
-# Trained weights (LESSON 10)
+# Trained weights (v2 LESSON 10, still in force)
 # Ignored until `git lfs install` has been run and LFS tracking is confirmed
 # working (`git lfs track` should list *.keras). After that, delete the two
 # lines below to start committing weights through LFS.
@@ -29,9 +29,13 @@ outputs/splits/*
 !outputs/reports/.gitkeep
 !outputs/splits/.gitkeep
 
-# outputs/predictions/ is deliberately NOT ignored (LESSON 11). One small CSV
-# per run (a few hundred rows) is what lets a collapse check invented later be
-# applied to an old run without retraining it - that is evidence, not clutter.
+# outputs/predictions/ is deliberately NOT ignored (LESSON 5). One small CSV per
+# run (a few hundred rows) is what lets a collapse check invented later be
+# applied to an old run without retraining it - that is evidence, not clutter,
+# and on a CPU-only project a retrain is not an affordable substitute.
+
+# archive/ holds the frozen v1/v2 attempt and IS tracked - the lessons in the
+# v3 README point at its evidence. Never regenerate or edit it.
 
 # ---------------------------------------------------------------------------
 # Python / Jupyter / OS
