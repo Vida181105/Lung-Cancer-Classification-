@@ -2,6 +2,8 @@
   "split_variant": "faithful",
   "baseline": "EfficientNetV2B0",
   "protocol": "frozen backbone, head-only training",
+  "class_weight": "inverse_frequency",
+  "head_lr": 0.0001,
   "run_name": "efficientnetv2b0_faithful",
   "n_samples": 315,
   "class_names": [
@@ -10,5 +12,5 @@
     "normal",
     "squamous.cell.carcinoma"
   ],
-  "saved_at": "2026-08-11T16:18:23"
+  "saved_at": "2026-08-12T12:01:53"
 }
