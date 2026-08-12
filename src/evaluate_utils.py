@@ -54,8 +54,15 @@ from src.config import (
 
 
 def detect_partial_collapse(y_pred, num_classes=NUM_CLASSES,
-                            min_predicted_classes=MIN_PREDICTED_CLASSES) -> dict:
+                            min_predicted_classes=MIN_PREDICTED_CLASSES,
+                            class_names=None) -> dict:
     """Flag a model that never predicts some of the classes.
+
+    ``class_names`` defaults to the CT dataset's ``CLASS_NAMES``, so every
+    existing caller is unaffected. It exists so the second-dataset experiment
+    (``src/lc25000_utils.py``, 3 differently-named classes) can reuse this
+    detector rather than duplicate it - the one thing this project must never
+    have two versions of.
 
     **This is the check v2 was missing.** Its full-collapse rules only catch a
     model that emits *one* class. A model oscillating between 2 of 4 clears all
@@ -77,6 +84,7 @@ def detect_partial_collapse(y_pred, num_classes=NUM_CLASSES,
     the precedence so the harsher ``INVALID_collapsed`` tag wins.
     """
     reasons, details = [], {}
+    names = CLASS_NAMES if class_names is None else list(class_names)
     if y_pred is None:
         return {"partial": False, "reasons": reasons, "details": details}
 
@@ -86,14 +94,14 @@ def detect_partial_collapse(y_pred, num_classes=NUM_CLASSES,
     missing = [int(i) for i in range(num_classes) if counts[i] == 0]
 
     details["n_predicted_classes"] = int(len(predicted))
-    details["predicted_class_counts"] = {CLASS_NAMES[i]: int(counts[i])
+    details["predicted_class_counts"] = {names[i]: int(counts[i])
                                          for i in range(num_classes)}
-    details["never_predicted_classes"] = [CLASS_NAMES[i] for i in missing]
+    details["never_predicted_classes"] = [names[i] for i in missing]
 
     if len(predicted) < min_predicted_classes:
         reasons.append(
             f"model never predicts {len(missing)} of {num_classes} classes "
-            f"({', '.join(CLASS_NAMES[i] for i in missing)}) - "
+            f"({', '.join(names[i] for i in missing)}) - "
             f"{len(missing)} all-zero column(s) in the confusion matrix"
         )
     return {"partial": len(reasons) > 0, "reasons": reasons, "details": details}

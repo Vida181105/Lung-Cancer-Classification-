@@ -298,8 +298,10 @@ Every technique in lesson 2 is applied in good faith to genuinely close the gap 
 │   ├── models.py                      build_miniconvnet (one ~499K architecture), baseline builders
 │   ├── train_utils.py                 compile_model (clipnorm + label smoothing), callbacks + LR schedule,
 │   │                                  CPU time estimation, EpochTimer, dead-unit probe, file-size check
-│   └── evaluate_utils.py              detect_collapse (full + partial), prediction saving, metrics,
-│                                      tumour-vs-subtype breakdown, results routing
+│   ├── evaluate_utils.py              detect_collapse (full + partial), prediction saving, metrics,
+│   │                                  tumour-vs-subtype breakdown, results routing
+│   └── lc25000_utils.py               SECOND-dataset (LC25000) layer: 3-class indexing, split,
+│                                      pipeline, metrics, collapse checks, own results table
 ├── notebooks/
 │   ├── 00_dataset_audit.ipynb         class counts, duplicate/leakage audit, both splits, headers-only CSVs
 │   ├── 01_preprocessing_check.ipynb   geometry/dtype/range, label alignment, one-hot, augmentation preview
@@ -307,7 +309,8 @@ Every technique in lesson 2 is applied in good faith to genuinely close the gap 
 │   ├── 03_cross_validation.ipynb      3-fold CV on faithful → the canonical MiniConvNet row
 │   ├── 04_ablation_dropout.ipynb      dropout on vs off, same architecture, same budget
 │   ├── 05_train_baselines.ipynb       ResNet50, VGG16, MobileNetV3Small, EfficientNetV2B0 (frozen)
-│   └── 06_evaluate_and_compare.ipynb  collapse audit, tumour-vs-subtype table, paper comparison, comparison.md
+│   ├── 06_evaluate_and_compare.ipynb  collapse audit, tumour-vs-subtype table, paper comparison, comparison.md
+│   └── 07_second_dataset_lc25000.ipynb  SECOND dataset (LC25000 lung); additive, touches nothing above
 ├── models/                            trained weights (git-ignored until LFS is set up)
 └── outputs/
     ├── figures/                       history curves, confusion matrices, comparison plots
@@ -347,6 +350,7 @@ loads. Check the results of each before starting the next.
 | 5 | `04_ablation_dropout.ipynb` | 2 runs | §1 measures and reports before starting |
 | 6 | `05_train_baselines.ipynb` | 4 runs | §2 measures; heaviest notebook — one model per cell |
 | 7 | `06_evaluate_and_compare.ipynb` | no | ~1 min (reads CSVs only) |
+| 8 | `07_second_dataset_lc25000.ipynb` | 3 runs | optional, independent — needs `Data_LC25000/`; §3b measures before starting |
 
 The same notebooks work on Kaggle unchanged (`resolve_data_root()` finds `/kaggle/input/<slug>/`);
 attach the dataset as an input and enable internet for notebook 05's ImageNet weight download.
@@ -493,6 +497,97 @@ published number, which was computed on the same duplicated data.*
 
 *Fill in. If the number is far below 96%, say so plainly and give the evidence — the plateau, the
 confusion structure, the subtype gap. **Do not describe the paper as replicated.***
+
+---
+
+## Second-dataset validation (LC25000)
+
+The paper's abstract claims "extensive experiments on **two** publicly available datasets". Everything
+above replicates the primary CT-scan experiment only. [`notebooks/07_second_dataset_lc25000.ipynb`](notebooks/07_second_dataset_lc25000.ipynb)
+adds a smaller-scope experiment on a second dataset so that claim is addressed rather than assumed.
+
+**This is entirely additive.** It does not read, modify or re-run notebooks 00–06; the CT results
+above are final. It writes its own results table (`outputs/results_table_lc25000.csv`) and
+`lc25000_`-prefixed prediction files, so no existing output can be overwritten.
+
+### The dataset
+
+**LC25000, lung subset only** — 25,000-image histopathology set, of which the three lung classes are
+used and **both colon classes are excluded**:
+
+| folder | class | |
+|---|---|---|
+| `lung_aca` | `lung_adenocarcinoma` | malignant, 5,000 images |
+| `lung_scc` | `lung_squamous_cell_carcinoma` | malignant, 5,000 images |
+| `lung_n` | `lung_benign` | benign lung tissue, 5,000 images |
+
+Sources: [andrewmvd/lung-and-colon-cancer-histopathological-images](https://www.kaggle.com/datasets/andrewmvd/lung-and-colon-cancer-histopathological-images)
+or [doubleyouv10/lung-cancer-from-lc25000-dataset-split-10fold](https://www.kaggle.com/datasets/doubleyouv10/lung-cancer-from-lc25000-dataset-split-10fold).
+Place locally in `Data_LC25000/`, or attach on Kaggle — `resolve_lc25000_root()` finds either layout
+by searching for the three `lung_*` folder names at any depth.
+
+**This is a different problem, not a harder version of the same one.** LC25000 is histopathology
+(stained tissue, cellular scale); the primary dataset is CT slices (anatomical scale). The class sets
+differ — 3 vs 4, with no *large cell carcinoma* here. **The two accuracy numbers are not directly
+comparable.** What *is* comparable is the shape of the result: whether detection is again far easier
+than subtype discrimination (lesson 11).
+
+### Disclosed scope reduction
+
+Same pattern as everywhere else in this project — reduce deliberately, state it plainly.
+
+> **[CHOICE] One training run, not cross-validation.** The CT headline is a 3-fold CV mean ± std
+> (lesson 10); this secondary result is a single clean run. **It therefore has no error bar and must
+> never be quoted beside the CT number as though both were cross-validated.**
+
+> **[CHOICE] Two baselines, not four.** `MobileNetV3Small` (light) and `ResNet50` (heavy) span the
+> range; VGG16 and EfficientNetV2B0 add cost without adding contrast. Same frozen-backbone,
+> head-only protocol as the primary experiment.
+
+> **[CHOICE] Stratified subsample, decided by the timing gate.** LC25000's lung subset is 15,000
+> images against the CT dataset's ~1,000. Notebook 07 §3b measures one real epoch and, if the
+> projection exceeds the 20-minute threshold, trains on a stratified subsample
+> (`LC25000_IMAGES_PER_CLASS`, default 1,200/class = 3,600 images). The sample size is recorded in
+> every results row, so a reduced run cannot be read as a full-dataset one.
+
+Everything else is unchanged from the validated primary setup and is **not** re-derived: the
+LeakyReLU + He-init + wide-bottleneck architecture (`num_classes=3`, so 499,107 params instead of
+499,172), `Adam(lr=1e-4, clipnorm=1.0)`, label smoothing, `ReduceLROnPlateau`, **both** collapse
+checks, and raw prediction saving.
+
+### Data caveat — read before quoting any LC25000 number
+
+LC25000 is generated by augmenting **250 original images per class** up to 5,000. Near-duplicate
+images therefore exist *by construction*, and a random train/test split places augmentations of the
+same source image on both sides. This is the main reason published LC25000 accuracies run in the
+high 90s. The deduplicated `clean`-split treatment used for the CT dataset (lesson 6) is **not**
+repeated here — it would need a source-image grouping the dataset does not publish, and this is a
+secondary experiment. Notebook 07 checks filename collisions only and states the caveat rather than
+dropping it.
+
+### Results — *empty template until notebook 07 is run*
+
+`outputs/results_table_lc25000.csv`. Single runs, no CV, no error bars.
+
+| model | params | accuracy | f1_macro | cohen_kappa | benign_vs_malignant | subtype_acc | classes predicted | status |
+|---|---|---|---|---|---|---|---|---|
+| MiniConvNet | 499,107 | | | | | | | |
+| MobileNetV3Small | | | | | | | | |
+| ResNet50 | | | | | | | | |
+
+### Cross-dataset comparison — *fill in after running*
+
+The question worth answering, given the numbers are not directly comparable:
+
+| dataset | detection accuracy | subtype accuracy | gap |
+|---|---|---|---|
+| CT (primary, all models) | 0.92–0.99 | 0.35–0.66 | large |
+| LC25000 (this experiment) | | | |
+
+*Fill in: does the detection-vs-subtyping gap that dominated the CT results appear on LC25000 too? If
+it does, subtype discrimination is the hard part of the task in general rather than an artefact of
+the CT dataset. If it does not, the CT gap was dataset-specific — equally informative, and worth
+saying either way.*
 
 ---
 
