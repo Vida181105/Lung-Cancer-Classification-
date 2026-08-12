@@ -379,6 +379,42 @@ the `faithful` split.
 | miniconvnet_clean | clean *(robustness experiment, NOT a replication)* | | | | | |
 | cv_faithful_fold1–3 | faithful | | | | | |
 
+#### Fold-to-fold variance: why fold 3 is lower
+
+The 3-fold CV std (±0.12) is driven almost entirely by fold 3: **0.769 / 0.781 / 0.568**. Analysis of
+the saved per-fold prediction files (`outputs/predictions/cv_faithful_fold{1,2,3}_predictions.csv`),
+no retraining involved:
+
+- **Not a class-balance effect.** `StratifiedKFold` gives the three test partitions near-identical
+  distributions — adenocarcinoma 33.6–33.9%, large cell 18.6–18.9%, normal 21.3–21.6%, squamous
+  25.8–26.1%. Fold 3's test set is not harder by composition.
+- **Not a collapse.** All three folds predict all four classes; fold 3 is `ok`, not
+  `INVALID_partial_collapse`.
+- **The drop is concentrated, not spread evenly.** Per-class recall, folds 1/2 → fold 3:
+
+  | class | fold 1 | fold 2 | fold 3 |
+  |---|---|---|---|
+  | large.cell.carcinoma | 0.661 | 0.790 | **0.302** |
+  | normal | 1.000 | 0.986 | **0.761** |
+  | adenocarcinoma | 0.690 | 0.841 | 0.634 |
+  | squamous.cell.carcinoma | 0.759 | 0.523 | 0.517 |
+
+  Large cell carcinoma — the smallest tumour class — accounts for most of it: 42 of its 63 test
+  images are lost to adenocarcinoma (23) and squamous (19). Secondly, and unusually for this project,
+  detection itself degrades: 14 `normal` images are called adenocarcinoma, dropping fold 3's
+  tumour-vs-healthy accuracy to 0.922 against 0.973 and 0.976 for the other two folds.
+- **Fold 3 was also the only fold to stop early**: 22 epochs against the full 40-epoch budget used by
+  folds 1 and 2, which never triggered early stopping and were therefore still capped by the budget
+  rather than converged.
+
+**Conclusion, stated no more strongly than the data supports**: fold 3's lower accuracy is *not*
+attributable to an unluckier class distribution, and it is not a collapse. It is a weaker model whose
+loss is concentrated in the minority tumour subtype, coinciding with it being the only fold to
+early-stop at roughly half the training of the others. Whether the early stop caused the weaker
+result or merely reflects a validation split that plateaued sooner **cannot be settled from the saved
+data** — the per-fold history JSONs are git-ignored and no validation curves were retained. Beyond
+that, this is consistent with ordinary fold-to-fold variance on ~1000 images.
+
 ### Dropout ablation — `outputs/ablation_dropout.csv`
 
 | run_name | dropout | accuracy | f1_macro | cohen_kappa | classes predicted | status |
