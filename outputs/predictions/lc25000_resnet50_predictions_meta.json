@@ -1,0 +1,15 @@
+{
+  "arch_variant": "transfer_frozen",
+  "note": "; ImageNet feature extraction, head-only training",
+  "n_train": 2520,
+  "sampled_per_class": 1200,
+  "run_name": "lc25000_resnet50",
+  "dataset": "LC25000 (lung subset, 3 classes)",
+  "n_samples": 720,
+  "class_names": [
+    "lung_adenocarcinoma",
+    "lung_benign",
+    "lung_squamous_cell_carcinoma"
+  ],
+  "saved_at": "2026-08-13T17:16:51"
+}
