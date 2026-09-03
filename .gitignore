@@ -58,3 +58,18 @@ env/
 # Shared libraries / binary files
 *.so
 *.so*
+
+# Phase 2 - local-only trained checkpoints (fair re-benchmark + the single
+# MiniConvNet checkpoint run). These are large binary files that must never
+# go through git; back them up manually (Drive, external disk, etc.) after
+# running the notebook that produces them.
+checkpoints_local/
+
+# Phase 2 fair-benchmark predictions/histories/confusion matrices/figures are
+# regenerable from checkpoints_local/ + the dataset, so they stay local too.
+# The metrics CSV/JSON are small and ARE worth tracking - only the bulky,
+# regenerable per-run artefacts are ignored here.
+results/fair_baseline/predictions/
+results/fair_baseline/histories/
+results/fair_baseline/confusion_matrices/
+results/fair_baseline/figures/
