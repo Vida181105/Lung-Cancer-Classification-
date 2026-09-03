@@ -1,0 +1,23 @@
+section,check,value,note
+patient_ids,patient_ids_available,False,"NO genuine patient identifiers are available. The dataset provides only filepath, filename, class folder and original split; there is no manifest, no DICOM header, and no patient/subject column. Filename stems are numeric but are image indices, not patient IDs, and are NOT treated as such here. CONSEQUENCE: patient-level leakage CANNOT be verified or excluded. Any claim of 'patient-aware' or 'patient-level' evaluation would be unsupported. The strongest defensible grouping is image-level (exact + near-duplicate groups), which is what this analysis builds."
+patient_ids,identifier_columns_found,none,columns in the index that could carry a subject identifier
+patient_ids,dicom_available,False,no DICOM files found under the dataset root
+exact,n_images,1000,
+exact,n_unique_md5,847,
+exact,n_duplicate_groups,59,
+exact,n_files_in_duplicate_groups,212,
+exact,n_redundant_files,153,removable with no information loss
+exact,cross_split_duplicate_pairs,196,"{'test<->train': 130, 'test<->val': 24, 'train<->val': 42}"
+exact,within_split_duplicate_pairs,208,"{'test': 40, 'train': 166, 'val': 2}"
+near,phash_threshold,5,Hamming distance over 64-bit pHash
+near,near_duplicate_pairs_excl_exact,891,
+near,near_duplicate_cross_split_pairs,365,
+near,near_duplicate_cross_class_pairs,4,near-identical images with DIFFERENT labels - inspect manually
+groups,n_image_groups,726,"exact + near, connected components"
+groups,n_multi_image_groups,89,
+groups,n_images_in_multi_groups,363,
+groups,largest_group_size,50,
+controlled_split,count[adenocarcinoma],338,train=235 val=35 test=68
+controlled_split,count[large.cell.carcinoma],187,train=132 val=18 test=37
+controlled_split,count[normal],215,train=151 val=21 test=43
+controlled_split,count[squamous.cell.carcinoma],260,train=183 val=25 test=52

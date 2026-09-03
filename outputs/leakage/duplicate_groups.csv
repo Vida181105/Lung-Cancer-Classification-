@@ -1,0 +1,213 @@
+group_id,hash,group_size,filepath,filename,class,split,n_splits_spanned,splits_spanned
+1,01c81f15b578c0b7a0583a8cc6f74bc4,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\19 (2) - Copy.png,19 (2) - Copy.png,normal,train,1,train
+1,01c81f15b578c0b7a0583a8cc6f74bc4,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\19 (2).png,19 (2).png,normal,train,1,train
+2,0246900641cdc0ee36de1c0a2bc974ae,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\18 - Copy (3).png,18 - Copy (3).png,normal,train,1,train
+2,0246900641cdc0ee36de1c0a2bc974ae,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\18.png,18.png,normal,train,1,train
+3,071ffc9dd155d9f3f30c42aca168c0fb,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\3 (2) - Copy.png,3 (2) - Copy.png,normal,train,1,train
+3,071ffc9dd155d9f3f30c42aca168c0fb,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\3 (2).png,3 (2).png,normal,train,1,train
+3,071ffc9dd155d9f3f30c42aca168c0fb,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\3 - Copy (3).png,3 - Copy (3).png,normal,train,1,train
+3,071ffc9dd155d9f3f30c42aca168c0fb,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\3.png,3.png,normal,train,1,train
+4,08ea225a55d83e937d27c682964a1449,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\13 (2) - Copy.png,13 (2) - Copy.png,normal,train,1,train
+4,08ea225a55d83e937d27c682964a1449,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\13 (2).png,13 (2).png,normal,train,1,train
+5,0cd58bfa4e7510100f03f928af9b4afc,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\2 - Copy (3).png,2 - Copy (3).png,normal,train,1,train
+5,0cd58bfa4e7510100f03f928af9b4afc,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\2.png,2.png,normal,train,1,train
+6,0d645c4b19992372a9f6ad52a47729f5,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\17 - Copy (3).png,17 - Copy (3).png,normal,train,1,train
+6,0d645c4b19992372a9f6ad52a47729f5,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\17.png,17.png,normal,train,1,train
+7,11c2e59052d1ef90a1d6484dbe244eeb,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\16 - Copy - Copy.png,16 - Copy - Copy.png,normal,train,1,train
+7,11c2e59052d1ef90a1d6484dbe244eeb,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\16 - Copy.png,16 - Copy.png,normal,train,1,train
+8,14fa9aa413d8fe1d18bf960d8828740a,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\19 - Copy - Copy.png,19 - Copy - Copy.png,normal,train,1,train
+8,14fa9aa413d8fe1d18bf960d8828740a,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\19 - Copy.png,19 - Copy.png,normal,train,1,train
+9,168fde108ec12eed2d36a98e899500f4,8,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\8 - Copy (2) - Copy.png,8 - Copy (2) - Copy.png,normal,test,2,test|train
+9,168fde108ec12eed2d36a98e899500f4,8,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\8 - Copy (2).png,8 - Copy (2).png,normal,test,2,test|train
+9,168fde108ec12eed2d36a98e899500f4,8,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\8 - Copy - Copy.png,8 - Copy - Copy.png,normal,test,2,test|train
+9,168fde108ec12eed2d36a98e899500f4,8,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\8 - Copy.png,8 - Copy.png,normal,test,2,test|train
+9,168fde108ec12eed2d36a98e899500f4,8,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\8 - Copy (2) - Copy.png,8 - Copy (2) - Copy.png,normal,train,2,test|train
+9,168fde108ec12eed2d36a98e899500f4,8,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\8 - Copy (2).png,8 - Copy (2).png,normal,train,2,test|train
+9,168fde108ec12eed2d36a98e899500f4,8,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\8 - Copy - Copy.png,8 - Copy - Copy.png,normal,train,2,test|train
+9,168fde108ec12eed2d36a98e899500f4,8,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\8 - Copy.png,8 - Copy.png,normal,train,2,test|train
+10,19760ebd9fc13424fcfb653c0097a995,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\21 - Copy (2) - Copy.png,21 - Copy (2) - Copy.png,normal,train,1,train
+10,19760ebd9fc13424fcfb653c0097a995,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\21 - Copy (2).png,21 - Copy (2).png,normal,train,1,train
+10,19760ebd9fc13424fcfb653c0097a995,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\21 - Copy - Copy.png,21 - Copy - Copy.png,normal,train,1,train
+10,19760ebd9fc13424fcfb653c0097a995,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\21 - Copy.png,21 - Copy.png,normal,train,1,train
+11,2a22fd805d0db68736491698305c25d8,9,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\6 - Copy (2) - Copy.png,6 - Copy (2) - Copy.png,normal,test,3,test|train|val
+11,2a22fd805d0db68736491698305c25d8,9,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\6 - Copy (2).png,6 - Copy (2).png,normal,test,3,test|train|val
+11,2a22fd805d0db68736491698305c25d8,9,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\6 - Copy.png,6 - Copy.png,normal,test,3,test|train|val
+11,2a22fd805d0db68736491698305c25d8,9,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\6 - Copy (2) - Copy.png,6 - Copy (2) - Copy.png,normal,train,3,test|train|val
+11,2a22fd805d0db68736491698305c25d8,9,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\6 - Copy (2).png,6 - Copy (2).png,normal,train,3,test|train|val
+11,2a22fd805d0db68736491698305c25d8,9,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\6 - Copy - Copy.png,6 - Copy - Copy.png,normal,train,3,test|train|val
+11,2a22fd805d0db68736491698305c25d8,9,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\6 - Copy.png,6 - Copy.png,normal,train,3,test|train|val
+11,2a22fd805d0db68736491698305c25d8,9,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\valid\normal\6 - Copy (2) - Copy.png,6 - Copy (2) - Copy.png,normal,val,3,test|train|val
+11,2a22fd805d0db68736491698305c25d8,9,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\valid\normal\6 - Copy.png,6 - Copy.png,normal,val,3,test|train|val
+12,2db6f3f8a0d064d40a480f3f4c4bded4,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\20 - Copy - Copy.png,20 - Copy - Copy.png,normal,train,1,train
+12,2db6f3f8a0d064d40a480f3f4c4bded4,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\20 - Copy.png,20 - Copy.png,normal,train,1,train
+13,2ecce925c81a3efc3d4a964ca57ff650,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\11 - Copy (3).png,11 - Copy (3).png,normal,test,2,test|train
+13,2ecce925c81a3efc3d4a964ca57ff650,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\11.png,11.png,normal,test,2,test|train
+13,2ecce925c81a3efc3d4a964ca57ff650,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\11 - Copy (3).png,11 - Copy (3).png,normal,train,2,test|train
+13,2ecce925c81a3efc3d4a964ca57ff650,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\11.png,11.png,normal,train,2,test|train
+14,2f6fdc5873f3c4267eac65cf04bf96c3,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\n8 (2) - Copy.jpg,n8 (2) - Copy.jpg,normal,train,1,train
+14,2f6fdc5873f3c4267eac65cf04bf96c3,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\n8 (2).jpg,n8 (2).jpg,normal,train,1,train
+14,2f6fdc5873f3c4267eac65cf04bf96c3,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\n8 - Copy.jpg,n8 - Copy.jpg,normal,train,1,train
+14,2f6fdc5873f3c4267eac65cf04bf96c3,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\n8.jpg,n8.jpg,normal,train,1,train
+15,3192f903fd737bda84aa9cbb2bc19dcf,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\n6 (2) - Copy.jpg,n6 (2) - Copy.jpg,normal,train,1,train
+15,3192f903fd737bda84aa9cbb2bc19dcf,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\n6 (2).jpg,n6 (2).jpg,normal,train,1,train
+15,3192f903fd737bda84aa9cbb2bc19dcf,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\n6 - Copy.jpg,n6 - Copy.jpg,normal,train,1,train
+15,3192f903fd737bda84aa9cbb2bc19dcf,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\n6.jpg,n6.jpg,normal,train,1,train
+16,32c9080cd8561ddd72c6f5194e9f90c3,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\16 (2) - Copy.png,16 (2) - Copy.png,normal,train,1,train
+16,32c9080cd8561ddd72c6f5194e9f90c3,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\16 (2).png,16 (2).png,normal,train,1,train
+17,33b01950ff19a2e0fee00ef3670cb01f,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\11 - Copy - Copy.png,11 - Copy - Copy.png,normal,test,2,test|train
+17,33b01950ff19a2e0fee00ef3670cb01f,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\11 - Copy.png,11 - Copy.png,normal,test,2,test|train
+17,33b01950ff19a2e0fee00ef3670cb01f,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\11 - Copy - Copy.png,11 - Copy - Copy.png,normal,train,2,test|train
+17,33b01950ff19a2e0fee00ef3670cb01f,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\11 - Copy.png,11 - Copy.png,normal,train,2,test|train
+18,33c44160b1d99dc8fbb1fdf707af039e,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\squamous.cell.carcinoma_left.hilum_T1_N2_M0_IIIa\sq3.png,sq3.png,squamous.cell.carcinoma,train,1,train
+18,33c44160b1d99dc8fbb1fdf707af039e,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\squamous.cell.carcinoma_left.hilum_T1_N2_M0_IIIa\sq4.png,sq4.png,squamous.cell.carcinoma,train,1,train
+19,37c701fcbc991235cda33b2d85706f9f,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\19 - Copy (2) - Copy.png,19 - Copy (2) - Copy.png,normal,train,1,train
+19,37c701fcbc991235cda33b2d85706f9f,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\19 - Copy (2).png,19 - Copy (2).png,normal,train,1,train
+20,3bef55f68e7055e9311f985553e84768,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\12 - Copy - Copy.png,12 - Copy - Copy.png,normal,test,2,test|train
+20,3bef55f68e7055e9311f985553e84768,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\12 - Copy.png,12 - Copy.png,normal,test,2,test|train
+20,3bef55f68e7055e9311f985553e84768,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\12 - Copy - Copy.png,12 - Copy - Copy.png,normal,train,2,test|train
+20,3bef55f68e7055e9311f985553e84768,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\12 - Copy.png,12 - Copy.png,normal,train,2,test|train
+21,459435c13315cb96e585885735c94ccc,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\17 (2) - Copy.png,17 (2) - Copy.png,normal,train,1,train
+21,459435c13315cb96e585885735c94ccc,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\17 (2).png,17 (2).png,normal,train,1,train
+22,489afa049dc03363c587ef4f1c5f1d70,9,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\5 (2) - Copy.png,5 (2) - Copy.png,normal,train,2,train|val
+22,489afa049dc03363c587ef4f1c5f1d70,9,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\5 (2).png,5 (2).png,normal,train,2,train|val
+22,489afa049dc03363c587ef4f1c5f1d70,9,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\5 - Copy (2) - Copy.png,5 - Copy (2) - Copy.png,normal,train,2,train|val
+22,489afa049dc03363c587ef4f1c5f1d70,9,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\5 - Copy (2).png,5 - Copy (2).png,normal,train,2,train|val
+22,489afa049dc03363c587ef4f1c5f1d70,9,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\5 - Copy (3).png,5 - Copy (3).png,normal,train,2,train|val
+22,489afa049dc03363c587ef4f1c5f1d70,9,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\5 - Copy - Copy.png,5 - Copy - Copy.png,normal,train,2,train|val
+22,489afa049dc03363c587ef4f1c5f1d70,9,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\5 - Copy.png,5 - Copy.png,normal,train,2,train|val
+22,489afa049dc03363c587ef4f1c5f1d70,9,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\5.png,5.png,normal,train,2,train|val
+22,489afa049dc03363c587ef4f1c5f1d70,9,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\valid\normal\5.png,5.png,normal,val,2,train|val
+23,4ebb15aceb4072cb73457cbeadeede2a,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\12 - Copy (2) - Copy.png,12 - Copy (2) - Copy.png,normal,test,2,test|train
+23,4ebb15aceb4072cb73457cbeadeede2a,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\12 - Copy (2).png,12 - Copy (2).png,normal,test,2,test|train
+23,4ebb15aceb4072cb73457cbeadeede2a,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\12 - Copy (2) - Copy.png,12 - Copy (2) - Copy.png,normal,train,2,test|train
+23,4ebb15aceb4072cb73457cbeadeede2a,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\12 - Copy (2).png,12 - Copy (2).png,normal,train,2,test|train
+24,54b4ab4d25aaf23d36a3c57860d20411,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\13 - Copy (3).png,13 - Copy (3).png,normal,train,1,train
+24,54b4ab4d25aaf23d36a3c57860d20411,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\13.png,13.png,normal,train,1,train
+25,55ff72351cd8799c4a92ad8cc6d852c0,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\20 - Copy (2) - Copy.png,20 - Copy (2) - Copy.png,normal,train,1,train
+25,55ff72351cd8799c4a92ad8cc6d852c0,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\20 - Copy (2).png,20 - Copy (2).png,normal,train,1,train
+26,5f468089b5597b4873412a1562d1c830,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\10 (2) - Copy.png,10 (2) - Copy.png,normal,test,2,test|train
+26,5f468089b5597b4873412a1562d1c830,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\10 (2).png,10 (2).png,normal,test,2,test|train
+26,5f468089b5597b4873412a1562d1c830,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\10 (2) - Copy.png,10 (2) - Copy.png,normal,train,2,test|train
+26,5f468089b5597b4873412a1562d1c830,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\10 (2).png,10 (2).png,normal,train,2,test|train
+27,60649ff70c9ea03e0ab227620379026f,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\10 - Copy (2) - Copy.png,10 - Copy (2) - Copy.png,normal,test,2,test|train
+27,60649ff70c9ea03e0ab227620379026f,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\10 - Copy (2).png,10 - Copy (2).png,normal,test,2,test|train
+27,60649ff70c9ea03e0ab227620379026f,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\10 - Copy (2) - Copy.png,10 - Copy (2) - Copy.png,normal,train,2,test|train
+27,60649ff70c9ea03e0ab227620379026f,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\10 - Copy (2).png,10 - Copy (2).png,normal,train,2,test|train
+28,619cb5c53a58021dc329817f0124c0ec,5,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\4 (2) - Copy.png,4 (2) - Copy.png,normal,train,2,train|val
+28,619cb5c53a58021dc329817f0124c0ec,5,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\4 (2).png,4 (2).png,normal,train,2,train|val
+28,619cb5c53a58021dc329817f0124c0ec,5,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\4 - Copy (3).png,4 - Copy (3).png,normal,train,2,train|val
+28,619cb5c53a58021dc329817f0124c0ec,5,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\4.png,4.png,normal,train,2,train|val
+28,619cb5c53a58021dc329817f0124c0ec,5,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\valid\normal\4 (2).png,4 (2).png,normal,val,2,train|val
+29,6c0bb991f74ebcd94018392649935488,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\16 - Copy (3).png,16 - Copy (3).png,normal,train,1,train
+29,6c0bb991f74ebcd94018392649935488,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\16.png,16.png,normal,train,1,train
+30,6cdf7af1a565474267e529d8e2806a5b,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\17 - Copy - Copy.png,17 - Copy - Copy.png,normal,train,1,train
+30,6cdf7af1a565474267e529d8e2806a5b,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\17 - Copy.png,17 - Copy.png,normal,train,1,train
+31,6d22297f0784fb1a73b92a772fbddd26,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\10 - Copy (3).png,10 - Copy (3).png,normal,test,2,test|train
+31,6d22297f0784fb1a73b92a772fbddd26,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\10.png,10.png,normal,test,2,test|train
+31,6d22297f0784fb1a73b92a772fbddd26,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\10 - Copy (3).png,10 - Copy (3).png,normal,train,2,test|train
+31,6d22297f0784fb1a73b92a772fbddd26,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\10.png,10.png,normal,train,2,test|train
+32,6e9dcb3d1f8115dd4bca8c174c3ddc11,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\n9 (2) - Copy.jpg,n9 (2) - Copy.jpg,normal,train,1,train
+32,6e9dcb3d1f8115dd4bca8c174c3ddc11,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\n9 (2).jpg,n9 (2).jpg,normal,train,1,train
+32,6e9dcb3d1f8115dd4bca8c174c3ddc11,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\n9 - Copy.jpg,n9 - Copy.jpg,normal,train,1,train
+32,6e9dcb3d1f8115dd4bca8c174c3ddc11,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\n9.jpg,n9.jpg,normal,train,1,train
+33,73c3c787dedea638633a1d53e41ca508,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\18 (2) - Copy.png,18 (2) - Copy.png,normal,train,1,train
+33,73c3c787dedea638633a1d53e41ca508,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\18 (2).png,18 (2).png,normal,train,1,train
+34,740f05c0bfc0f1cf80409a40a4d7a8c9,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\17 - Copy (2) - Copy.png,17 - Copy (2) - Copy.png,normal,train,1,train
+34,740f05c0bfc0f1cf80409a40a4d7a8c9,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\17 - Copy (2).png,17 - Copy (2).png,normal,train,1,train
+35,7952642030d709d46e1eb1ba69174c45,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\3 - Copy (2) - Copy.png,3 - Copy (2) - Copy.png,normal,train,1,train
+35,7952642030d709d46e1eb1ba69174c45,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\3 - Copy (2).png,3 - Copy (2).png,normal,train,1,train
+35,7952642030d709d46e1eb1ba69174c45,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\3 - Copy - Copy.png,3 - Copy - Copy.png,normal,train,1,train
+35,7952642030d709d46e1eb1ba69174c45,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\3 - Copy.png,3 - Copy.png,normal,train,1,train
+36,8166e29023c244b9abce2ca052aa2916,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\13 - Copy (2) - Copy.png,13 - Copy (2) - Copy.png,normal,train,1,train
+36,8166e29023c244b9abce2ca052aa2916,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\13 - Copy (2).png,13 - Copy (2).png,normal,train,1,train
+37,81a47ae233d917ad8fa9d66c9f4ba1bd,9,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\7 - Copy (2) - Copy.png,7 - Copy (2) - Copy.png,normal,test,3,test|train|val
+37,81a47ae233d917ad8fa9d66c9f4ba1bd,9,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\7 - Copy (2).png,7 - Copy (2).png,normal,test,3,test|train|val
+37,81a47ae233d917ad8fa9d66c9f4ba1bd,9,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\7 - Copy - Copy.png,7 - Copy - Copy.png,normal,test,3,test|train|val
+37,81a47ae233d917ad8fa9d66c9f4ba1bd,9,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\7 - Copy.png,7 - Copy.png,normal,test,3,test|train|val
+37,81a47ae233d917ad8fa9d66c9f4ba1bd,9,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\7 - Copy (2) - Copy.png,7 - Copy (2) - Copy.png,normal,train,3,test|train|val
+37,81a47ae233d917ad8fa9d66c9f4ba1bd,9,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\7 - Copy (2).png,7 - Copy (2).png,normal,train,3,test|train|val
+37,81a47ae233d917ad8fa9d66c9f4ba1bd,9,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\7 - Copy - Copy.png,7 - Copy - Copy.png,normal,train,3,test|train|val
+37,81a47ae233d917ad8fa9d66c9f4ba1bd,9,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\7 - Copy.png,7 - Copy.png,normal,train,3,test|train|val
+37,81a47ae233d917ad8fa9d66c9f4ba1bd,9,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\valid\normal\7 - Copy (2).png,7 - Copy (2).png,normal,val,3,test|train|val
+38,891f23f1a6dac051a6de34371a00a398,5,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\8 - Copy (3).png,8 - Copy (3).png,normal,test,3,test|train|val
+38,891f23f1a6dac051a6de34371a00a398,5,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\8.png,8.png,normal,test,3,test|train|val
+38,891f23f1a6dac051a6de34371a00a398,5,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\8 - Copy (3).png,8 - Copy (3).png,normal,train,3,test|train|val
+38,891f23f1a6dac051a6de34371a00a398,5,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\8.png,8.png,normal,train,3,test|train|val
+38,891f23f1a6dac051a6de34371a00a398,5,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\valid\normal\8 - Copy (3).png,8 - Copy (3).png,normal,val,3,test|train|val
+39,8b09b57b7eae5d2425ff7561ebfae0c2,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\19 - Copy (3).png,19 - Copy (3).png,normal,train,1,train
+39,8b09b57b7eae5d2425ff7561ebfae0c2,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\19.png,19.png,normal,train,1,train
+40,90ccb4073ded5177d7b9dac7158b928d,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\11 (2) - Copy.png,11 (2) - Copy.png,normal,test,2,test|train
+40,90ccb4073ded5177d7b9dac7158b928d,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\11 (2).png,11 (2).png,normal,test,2,test|train
+40,90ccb4073ded5177d7b9dac7158b928d,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\11 (2) - Copy.png,11 (2) - Copy.png,normal,train,2,test|train
+40,90ccb4073ded5177d7b9dac7158b928d,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\11 (2).png,11 (2).png,normal,train,2,test|train
+41,9a41c798e6e59d44b96c646ec0cdabb0,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\20 (2) - Copy.png,20 (2) - Copy.png,normal,train,1,train
+41,9a41c798e6e59d44b96c646ec0cdabb0,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\20 (2).png,20 (2).png,normal,train,1,train
+41,9a41c798e6e59d44b96c646ec0cdabb0,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\20 - Copy (3).png,20 - Copy (3).png,normal,train,1,train
+41,9a41c798e6e59d44b96c646ec0cdabb0,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\20.png,20.png,normal,train,1,train
+42,a2beb8d6b18eb00288c5297caea3a7bc,3,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\12 - Copy (3).png,12 - Copy (3).png,normal,test,2,test|train
+42,a2beb8d6b18eb00288c5297caea3a7bc,3,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\12 - Copy (3).png,12 - Copy (3).png,normal,train,2,test|train
+42,a2beb8d6b18eb00288c5297caea3a7bc,3,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\12.png,12.png,normal,train,2,test|train
+43,acd405d5bb971e46887c9ebc14e2f48f,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\large.cell.carcinoma_left.hilum_T2_N2_M0_IIIa\l4.png,l4.png,large.cell.carcinoma,train,1,train
+43,acd405d5bb971e46887c9ebc14e2f48f,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\squamous.cell.carcinoma_left.hilum_T1_N2_M0_IIIa\sq2.png,sq2.png,squamous.cell.carcinoma,train,1,train
+44,ae5f1f39f812e92f0d638750fca7db66,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\n7 (2) - Copy.png,n7 (2) - Copy.png,normal,train,1,train
+44,ae5f1f39f812e92f0d638750fca7db66,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\n7 (2).png,n7 (2).png,normal,train,1,train
+44,ae5f1f39f812e92f0d638750fca7db66,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\n7 - Copy.png,n7 - Copy.png,normal,train,1,train
+44,ae5f1f39f812e92f0d638750fca7db66,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\n7.png,n7.png,normal,train,1,train
+45,be0395bdf9dc104b7bc2dca3d712e103,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\squamous.cell.carcinoma_left.hilum_T1_N2_M0_IIIa\sq5.png,sq5.png,squamous.cell.carcinoma,train,1,train
+45,be0395bdf9dc104b7bc2dca3d712e103,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\squamous.cell.carcinoma_left.hilum_T1_N2_M0_IIIa\sq6.png,sq6.png,squamous.cell.carcinoma,train,1,train
+46,be891546a445986a881ba74696f8a492,10,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\7 (2) - Copy.png,7 (2) - Copy.png,normal,test,3,test|train|val
+46,be891546a445986a881ba74696f8a492,10,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\7 (2).png,7 (2).png,normal,test,3,test|train|val
+46,be891546a445986a881ba74696f8a492,10,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\7 - Copy (3).png,7 - Copy (3).png,normal,test,3,test|train|val
+46,be891546a445986a881ba74696f8a492,10,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\7.png,7.png,normal,test,3,test|train|val
+46,be891546a445986a881ba74696f8a492,10,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\7 (2) - Copy.png,7 (2) - Copy.png,normal,train,3,test|train|val
+46,be891546a445986a881ba74696f8a492,10,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\7 (2).png,7 (2).png,normal,train,3,test|train|val
+46,be891546a445986a881ba74696f8a492,10,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\7 - Copy (3).png,7 - Copy (3).png,normal,train,3,test|train|val
+46,be891546a445986a881ba74696f8a492,10,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\7.png,7.png,normal,train,3,test|train|val
+46,be891546a445986a881ba74696f8a492,10,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\valid\normal\7 - Copy (3).png,7 - Copy (3).png,normal,val,3,test|train|val
+46,be891546a445986a881ba74696f8a492,10,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\valid\normal\7.png,7.png,normal,val,3,test|train|val
+47,c5b028c8ce7837ec365dfd4606eea527,9,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\6 (2) - Copy.png,6 (2) - Copy.png,normal,test,3,test|train|val
+47,c5b028c8ce7837ec365dfd4606eea527,9,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\6 (2).png,6 (2).png,normal,test,3,test|train|val
+47,c5b028c8ce7837ec365dfd4606eea527,9,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\6 - Copy (3).png,6 - Copy (3).png,normal,test,3,test|train|val
+47,c5b028c8ce7837ec365dfd4606eea527,9,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\6.png,6.png,normal,test,3,test|train|val
+47,c5b028c8ce7837ec365dfd4606eea527,9,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\6 (2) - Copy.png,6 (2) - Copy.png,normal,train,3,test|train|val
+47,c5b028c8ce7837ec365dfd4606eea527,9,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\6 (2).png,6 (2).png,normal,train,3,test|train|val
+47,c5b028c8ce7837ec365dfd4606eea527,9,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\6 - Copy (3).png,6 - Copy (3).png,normal,train,3,test|train|val
+47,c5b028c8ce7837ec365dfd4606eea527,9,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\6.png,6.png,normal,train,3,test|train|val
+47,c5b028c8ce7837ec365dfd4606eea527,9,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\valid\normal\6 - Copy (3).png,6 - Copy (3).png,normal,val,3,test|train|val
+48,cb77eb2fca9a1fa0b3617d1a5a2c4bdd,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\18 - Copy (2) - Copy.png,18 - Copy (2) - Copy.png,normal,train,1,train
+48,cb77eb2fca9a1fa0b3617d1a5a2c4bdd,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\18 - Copy (2).png,18 - Copy (2).png,normal,train,1,train
+49,ce53a5fcb94b7345dfb7026b34f3e0ff,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\16 - Copy (2) - Copy.png,16 - Copy (2) - Copy.png,normal,train,1,train
+49,ce53a5fcb94b7345dfb7026b34f3e0ff,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\16 - Copy (2).png,16 - Copy (2).png,normal,train,1,train
+50,ce93bacfa74548a4966d093038f44edd,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\8 (2) - Copy.png,8 (2) - Copy.png,normal,test,2,test|train
+50,ce93bacfa74548a4966d093038f44edd,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\8 (2).png,8 (2).png,normal,test,2,test|train
+50,ce93bacfa74548a4966d093038f44edd,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\8 (2) - Copy.png,8 (2) - Copy.png,normal,train,2,test|train
+50,ce93bacfa74548a4966d093038f44edd,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\8 (2).png,8 (2).png,normal,train,2,test|train
+51,e0b5d49bb849a2dd47f9bb102cf8f6e6,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\13 - Copy - Copy.png,13 - Copy - Copy.png,normal,train,1,train
+51,e0b5d49bb849a2dd47f9bb102cf8f6e6,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\13 - Copy.png,13 - Copy.png,normal,train,1,train
+52,e743a19721513313e5d3d6210fd1cfca,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\12 (2) - Copy.png,12 (2) - Copy.png,normal,test,2,test|train
+52,e743a19721513313e5d3d6210fd1cfca,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\12 (2).png,12 (2).png,normal,test,2,test|train
+52,e743a19721513313e5d3d6210fd1cfca,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\12 (2) - Copy.png,12 (2) - Copy.png,normal,train,2,test|train
+52,e743a19721513313e5d3d6210fd1cfca,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\12 (2).png,12 (2).png,normal,train,2,test|train
+53,ef03696d21724e842d182a64032e8cf3,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\18 - Copy - Copy.png,18 - Copy - Copy.png,normal,train,1,train
+53,ef03696d21724e842d182a64032e8cf3,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\18 - Copy.png,18 - Copy.png,normal,train,1,train
+54,f560698a5054368eb64bf2726c8d74e3,5,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\4 - Copy (2) - Copy.png,4 - Copy (2) - Copy.png,normal,train,2,train|val
+54,f560698a5054368eb64bf2726c8d74e3,5,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\4 - Copy (2).png,4 - Copy (2).png,normal,train,2,train|val
+54,f560698a5054368eb64bf2726c8d74e3,5,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\4 - Copy - Copy.png,4 - Copy - Copy.png,normal,train,2,train|val
+54,f560698a5054368eb64bf2726c8d74e3,5,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\4 - Copy.png,4 - Copy.png,normal,train,2,train|val
+54,f560698a5054368eb64bf2726c8d74e3,5,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\valid\normal\4 - Copy (2).png,4 - Copy (2).png,normal,val,2,train|val
+55,f77e3b8a4bd78bd6a23cbda652f03e48,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\2 - Copy (2) - Copy.png,2 - Copy (2) - Copy.png,normal,train,1,train
+55,f77e3b8a4bd78bd6a23cbda652f03e48,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\2 - Copy (2).png,2 - Copy (2).png,normal,train,1,train
+55,f77e3b8a4bd78bd6a23cbda652f03e48,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\2 - Copy - Copy.png,2 - Copy - Copy.png,normal,train,1,train
+55,f77e3b8a4bd78bd6a23cbda652f03e48,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\2 - Copy.png,2 - Copy.png,normal,train,1,train
+56,f8fdeb1e90b0961fcc57b8a1e9f0ca10,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\2 (2) - Copy.png,2 (2) - Copy.png,normal,train,1,train
+56,f8fdeb1e90b0961fcc57b8a1e9f0ca10,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\2 (2).png,2 (2).png,normal,train,1,train
+57,f967f52c691519d8ffa26d90ac9dc198,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\11 - Copy (2) - Copy.png,11 - Copy (2) - Copy.png,normal,test,2,test|train
+57,f967f52c691519d8ffa26d90ac9dc198,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\11 - Copy (2).png,11 - Copy (2).png,normal,test,2,test|train
+57,f967f52c691519d8ffa26d90ac9dc198,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\11 - Copy (2) - Copy.png,11 - Copy (2) - Copy.png,normal,train,2,test|train
+57,f967f52c691519d8ffa26d90ac9dc198,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\11 - Copy (2).png,11 - Copy (2).png,normal,train,2,test|train
+58,fc2e5247b58037186b2bd164431e9ac3,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\10 - Copy - Copy.png,10 - Copy - Copy.png,normal,test,2,test|train
+58,fc2e5247b58037186b2bd164431e9ac3,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\test\normal\10 - Copy.png,10 - Copy.png,normal,test,2,test|train
+58,fc2e5247b58037186b2bd164431e9ac3,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\10 - Copy - Copy.png,10 - Copy - Copy.png,normal,train,2,test|train
+58,fc2e5247b58037186b2bd164431e9ac3,4,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\normal\10 - Copy.png,10 - Copy.png,normal,train,2,test|train
+59,fdda5fa348cef0e20320effe649cc624,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\adenocarcinoma_left.lower.lobe_T2_N0_M0_Ib\ad16.png,ad16.png,adenocarcinoma,train,1,train
+59,fdda5fa348cef0e20320effe649cc624,2,C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data\train\adenocarcinoma_left.lower.lobe_T2_N0_M0_Ib\ad21.png,ad21.png,adenocarcinoma,train,1,train
