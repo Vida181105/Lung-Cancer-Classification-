@@ -1,0 +1,101 @@
+{
+  "phase": "PHASE 1 - data leakage / duplicate analysis",
+  "dataset": "Chest CT-Scan images (Kaggle, Mohamed Hany) - 4 classes",
+  "analysis_split_analysed": "faithful (the dataset original train/valid/test folders)",
+  "total_images": 1000,
+  "unique_images_md5": 847,
+  "duplicate_groups": 59,
+  "redundant_files": 153,
+  "cross_split_duplicate_pairs": 196,
+  "cross_split_duplicate_pairs_detail": {
+    "test<->train": 130,
+    "test<->val": 24,
+    "train<->val": 42
+  },
+  "within_split_duplicate_pairs": {
+    "test": 40,
+    "train": 166,
+    "val": 2
+  },
+  "near_duplicate_threshold_hamming": 5,
+  "near_duplicate_pairs_excluding_exact": 891,
+  "near_duplicate_cross_split_pairs": 365,
+  "near_duplicate_cross_class_pairs": 4,
+  "image_groups": {
+    "n_images": 1000,
+    "n_groups": 726,
+    "n_singleton_groups": 637,
+    "n_multi_image_groups": 89,
+    "largest_group_size": 50,
+    "n_images_in_multi_groups": 363
+  },
+  "patient_ids_available": false,
+  "patient_level_split_claimable": false,
+  "patient_id_verdict": "NO genuine patient identifiers are available. The dataset provides only filepath, filename, class folder and original split; there is no manifest, no DICOM header, and no patient/subject column. Filename stems are numeric but are image indices, not patient IDs, and are NOT treated as such here. CONSEQUENCE: patient-level leakage CANNOT be verified or excluded. Any claim of 'patient-aware' or 'patient-level' evaluation would be unsupported. The strongest defensible grouping is image-level (exact + near-duplicate groups), which is what this analysis builds.",
+  "leakage_controlled_split_kind": "image_group_level",
+  "leakage_controlled_split_group_column": "image_group",
+  "leakage_controlled_split_path": "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\outputs\\splits\\leakage_controlled_split.csv",
+  "residual_cross_split_duplicate_pairs": 0,
+  "residual_cross_split_near_duplicate_pairs": 0,
+  "original_performance": {
+    "run_name": "miniconvnet_faithful",
+    "n_eval": 315,
+    "metrics": {
+      "accuracy": 0.40634920634920635,
+      "precision_macro": 0.497344982078853,
+      "recall_macro": 0.5280637254901961,
+      "f1_macro": 0.39157811885084615,
+      "f1_weighted": 0.3453516300918899,
+      "cohen_kappa": 0.2626736763049192,
+      "mcc": 0.3112468346021811,
+      "auc_macro": 0.7833918994969254
+    },
+    "per_class_f1": {
+      "adenocarcinoma": 0.18055555555555555,
+      "large.cell.carcinoma": 0.4659090909090909,
+      "normal": 0.5396825396825397,
+      "squamous.cell.carcinoma": 0.38016528925619836
+    },
+    "confusion_matrix": [
+      [
+        13,
+        49,
+        51,
+        7
+      ],
+      [
+        0,
+        41,
+        9,
+        1
+      ],
+      [
+        3,
+        0,
+        51,
+        0
+      ],
+      [
+        8,
+        35,
+        24,
+        23
+      ]
+    ],
+    "tumor_detection_accuracy": 0.7238095238095238,
+    "subtype_accuracy": 0.2950191570881226
+  },
+  "leakage_controlled_performance": null,
+  "retrain_required_for_controlled_evaluation": true,
+  "checkpoint_report": {
+    "models_dir": "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\models",
+    "models_dir_exists": true,
+    "n_checkpoints": 0,
+    "checkpoints": [],
+    "can_evaluate_without_retraining": false,
+    "note": "NO checkpoint exists. models/ is git-ignored and no weights were retained from any previous run, so the trained MiniConvNet cannot be re-scored on the new split. Producing a leakage-controlled number REQUIRES retraining, which this phase must not start without explicit approval."
+  },
+  "cpu_only": true,
+  "models_trained_in_this_notebook": 0,
+  "written_at": "2026-09-03T08:42:12"
+}

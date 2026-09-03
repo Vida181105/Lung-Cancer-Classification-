@@ -1,6 +1,6 @@
 # Dataset audit
 
-Data root: `C:\Users\shrey\OneDrive\sem7\Medical Image\Project\Lung-Cancer-Classification-new\Data`
+Data root: `C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Data`
 
 ## Class counts (ours vs paper)
 
