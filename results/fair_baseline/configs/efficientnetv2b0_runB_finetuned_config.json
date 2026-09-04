@@ -1,0 +1,17 @@
+{
+  "model": "EfficientNetV2B0",
+  "run_type": "finetuned",
+  "lr": 1e-05,
+  "epochs_budget": 15,
+  "epochs_run": 15,
+  "unfreeze_top_n": 20,
+  "unfreeze_report": {
+    "backbone_name": "efficientnetv2-b0",
+    "backbone_layers": 270,
+    "requested_unfreeze_top_n": 20,
+    "first_trainable_layer_index": 250,
+    "batchnorm_layers_kept_frozen": 4,
+    "trainable_backbone_layers": 16
+  },
+  "rationale": "compound-scaled blocks; top block group, BN kept frozen"
+}

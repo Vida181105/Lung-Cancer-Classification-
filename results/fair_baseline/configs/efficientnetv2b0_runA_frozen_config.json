@@ -1,0 +1,9 @@
+{
+  "model": "EfficientNetV2B0",
+  "run_type": "frozen",
+  "lr": 0.001,
+  "epochs_budget": 25,
+  "epochs_run": 17,
+  "unfreeze_top_n": 0,
+  "rationale": "compound-scaled blocks; top block group, BN kept frozen"
+}
