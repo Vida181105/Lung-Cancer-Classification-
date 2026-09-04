@@ -1,0 +1,9 @@
+{
+  "model": "VGG16",
+  "run_type": "frozen",
+  "lr": 0.0001,
+  "epochs_budget": 25,
+  "epochs_run": 20,
+  "unfreeze_top_n": 0,
+  "rationale": "no normalisation layers + slowest on CPU; shallowest unfreeze"
+}

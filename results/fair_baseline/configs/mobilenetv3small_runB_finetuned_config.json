@@ -1,0 +1,17 @@
+{
+  "model": "MobileNetV3Small",
+  "run_type": "finetuned",
+  "lr": 0.0001,
+  "epochs_budget": 15,
+  "epochs_run": 15,
+  "unfreeze_top_n": 20,
+  "unfreeze_report": {
+    "backbone_name": "MobileNetV3Small",
+    "backbone_layers": 157,
+    "requested_unfreeze_top_n": 20,
+    "first_trainable_layer_index": 137,
+    "batchnorm_layers_kept_frozen": 5,
+    "trainable_backbone_layers": 15
+  },
+  "rationale": "cheapest per epoch; deepest unfreeze affordable on CPU"
+}
