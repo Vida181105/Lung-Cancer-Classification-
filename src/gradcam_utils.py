@@ -345,7 +345,7 @@ def colourise_heatmap(heatmap: np.ndarray, target_size) -> np.ndarray:
     Uses matplotlib + PIL only (no OpenCV, which is not in requirements.txt).
     Returns a uint8 RGB array.
     """
-    import matplotlib.cm as cm
+    import matplotlib
     from PIL import Image
 
     h = np.clip(heatmap, 0, 1)
@@ -353,7 +353,7 @@ def colourise_heatmap(heatmap: np.ndarray, target_size) -> np.ndarray:
     img = img.resize((target_size[1], target_size[0]), Image.Resampling.BILINEAR)
     h_resized = np.asarray(img, dtype=np.float32) / 255.0
 
-    cmap = cm.get_cmap("jet")
+    cmap = matplotlib.colormaps.get_cmap("jet")
     coloured = cmap(h_resized)[:, :, :3]              # RGBA -> RGB, [0,1]
     return (coloured * 255).astype(np.uint8)
 
@@ -612,10 +612,26 @@ def build_category_grid(records: pd.DataFrame, model_name, method, category,
 
     for i, (_, r) in enumerate(subset.reset_index(drop=True).iterrows()):
         ax = axes[i // cols][i % cols]
-        img = Image.open(r["overlay_path"])
-        ax.imshow(img)
+        overlay_path = r["overlay_path"]
+        # CSV empty cells are read by pandas as NaN (a float).  Do not pass
+        # those, or a stale/nonexistent path, through to Pillow.
+        if (r["status"] != "ok" or not isinstance(overlay_path, (str, Path))
+                or not str(overlay_path).strip() or not Path(overlay_path).is_file()):
+            ax.axis("off")
+            ax.set_title(
+                f'true={r["true_class"]}\npred={r["pred_class"]} '
+                f'({r["confidence"]:.2f}) [UNAVAILABLE]',
+                fontsize=8
+            )
+            continue
+
+        with Image.open(overlay_path) as img:
+            ax.imshow(img.copy())
+
         ax.axis("off")
+
         mark = "OK" if r["correct"] else "WRONG"
+
         ax.set_title(f"true={r['true_class']}\npred={r['pred_class']} "
                      f"({r['confidence']:.2f}) [{mark}]", fontsize=8)
     for j in range(n, rows * cols):
