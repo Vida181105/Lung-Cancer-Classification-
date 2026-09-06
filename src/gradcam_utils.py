@@ -194,20 +194,137 @@ def find_last_spatial_layer(model, _prefix=""):
     return candidates[-1]
 
 
-def build_gradcam_submodel(model, target_output_tensor):
-    """``keras.Model`` mapping the original inputs to (conv output, class scores).
+class _NestedBackboneGradModel:
+    """Callable replicating ``grad_model(image_batch, training=False) ->
+    (conv_output, predictions)`` for models that wrap their pretrained
+    backbone as a single nested ``tf.keras.Model`` layer.
 
-    This is the one place a nested-backbone architecture can fail: if the
-    target tensor is not actually connected to ``model.inputs`` in the traced
-    graph, model construction raises here. Callers should wrap this in a
-    try/except and treat a failure as "Grad-CAM is not reliably supported for
-    this architecture" (Step 3's documented-limitation path) rather than
-    forcing a workaround.
+    Why this exists (the bug this class fixes)
+    --------------------------------------------
+    ``models.build_baseline()`` builds every baseline (ResNet50, VGG16,
+    EfficientNetV2B0, MobileNetV3Small) as::
+
+        Input -> Lambda(preprocess_input) -> base(x, training=...) -> GAP -> Dense -> ... -> Dense
+
+    where ``base`` is a whole pretrained Keras Functional model (e.g.
+    ``keras.applications.VGG16(...)``) used as a single nested layer. When
+    :func:`find_last_spatial_layer` recurses into that nested model to find its
+    last 4D-output layer, the tensor it returns belongs to ``base``'s OWN
+    original functional graph (rooted at ``base.input``) - Keras 3 does not
+    re-trace a nested model's internals onto the outer model's input when the
+    nested model is called as a layer, so that tensor is genuinely NOT
+    connected to the outer model's ``inputs``. Trying to build
+    ``tf.keras.Model(inputs=model.inputs, outputs=[that_tensor, model.output])``
+    is exactly what raises ``"Output with path `0` is not connected to
+    `inputs`"`` - this was reproduced against
+    ``checkpoints_local/vgg16_runB_finetuned.keras`` and is expected for all
+    four baselines, since they are all built the same way.
+
+    MiniConvNet has no nested backbone (every layer is added directly to the
+    outer model), so the direct, single-graph construction in
+    :func:`build_gradcam_submodel` already works for it and is completely
+    unaffected by this class - this is a fallback path, only ever reached when
+    the direct construction fails.
+
+    How it reconnects the graph
+    ----------------------------
+    1. The backbone's OWN input/output are used to build a small, genuinely
+       connected sub-model: ``tf.keras.Model(backbone.input, [target_tensor,
+       backbone.output])``. This works because both tensors live in the
+       backbone's own self-contained graph.
+    2. The outer model's layers before the backbone (the preprocessing
+       ``Lambda``, or none at all) and after it (GAP, Dense, Dropout, ...,
+       the final softmax) are replayed as plain layer calls around that
+       sub-model, inside the SAME ``tf.GradientTape`` context used by
+       :func:`compute_gradcam` / :func:`compute_gradcam_plusplus` - so
+       gradients flow correctly from the final class score, back through the
+       head layers, through the backbone sub-model, to the target conv layer.
+
+    This reconstructs the exact original forward pass (preprocessing ->
+    backbone -> head), just as two connected stages instead of one.
+    """
+
+    def __init__(self, pre_layers, backbone_grad_model, post_layers):
+        self._pre_layers = list(pre_layers)
+        self._backbone_grad_model = backbone_grad_model
+        self._post_layers = list(post_layers)
+
+    def __call__(self, x, training=False):
+        for layer in self._pre_layers:
+            x = layer(x)
+        conv_output, backbone_features = self._backbone_grad_model(x, training=training)
+        y = backbone_features
+        for layer in self._post_layers:
+            y = layer(y, training=training)
+        return conv_output, y
+
+
+def _find_nested_backbone(model):
+    """The first top-level layer that is itself a ``tf.keras.Model``, plus the
+    outer layers before and after it, in ``model.layers`` order.
+
+    Every architecture built by ``models.build_baseline()`` has exactly one
+    such nested layer (the pretrained backbone). Returns
+    ``(nested_backbone, pre_layers, post_layers)``, or ``(None, None, None)``
+    if the model has no nested ``tf.keras.Model`` layer at all (e.g.
+    MiniConvNet), so callers can tell "flat architecture" apart from "nested
+    architecture whose backbone could not be located" (which would be a real,
+    reportable failure rather than something to paper over).
     """
     import tensorflow as tf
 
-    return tf.keras.Model(inputs=model.inputs,
-                          outputs=[target_output_tensor, model.output])
+    layers = model.layers
+    backbone_idx = next((i for i, l in enumerate(layers)
+                        if isinstance(l, tf.keras.Model)), None)
+    if backbone_idx is None:
+        return None, None, None
+
+    nested_backbone = layers[backbone_idx]
+    pre_layers = [l for l in layers[:backbone_idx]
+                 if not isinstance(l, tf.keras.layers.InputLayer)]
+    post_layers = layers[backbone_idx + 1:]
+    return nested_backbone, pre_layers, post_layers
+
+
+def build_gradcam_submodel(model, target_output_tensor):
+    """Callable mapping the original inputs to (conv output, class scores).
+
+    **Flat architectures (e.g. MiniConvNet) - unchanged path.** A single
+    ``tf.keras.Model(inputs=model.inputs, outputs=[target_output_tensor,
+    model.output])`` works directly, because every layer sits in one graph.
+    This is tried first and, when it succeeds, is returned exactly as before -
+    nothing about this path has changed.
+
+    **Nested-backbone architectures (every baseline from
+    ``models.build_baseline()``) - added fallback.** The direct construction
+    above raises (target tensor lives in the nested backbone's own graph, not
+    the outer model's - see :class:`_NestedBackboneGradModel` for the full
+    explanation). On that failure, this function locates the nested backbone
+    via :func:`_find_nested_backbone` and returns a
+    :class:`_NestedBackboneGradModel` instead, which reconnects
+    preprocessing -> backbone -> head as two linked stages so gradients still
+    flow end-to-end back to the target conv layer.
+
+    If no nested backbone can be found either (so the failure is NOT the known
+    nested-architecture case), the original exception is re-raised - callers
+    should treat that as "Grad-CAM is not reliably supported for this
+    architecture" (Step 3's documented-limitation path) rather than forcing a
+    workaround.
+    """
+    import tensorflow as tf
+
+    try:
+        return tf.keras.Model(inputs=model.inputs,
+                              outputs=[target_output_tensor, model.output])
+    except Exception as direct_exc:
+        nested_backbone, pre_layers, post_layers = _find_nested_backbone(model)
+        if nested_backbone is None:
+            raise direct_exc
+
+        backbone_grad_model = tf.keras.Model(
+            inputs=nested_backbone.input,
+            outputs=[target_output_tensor, nested_backbone.output])
+        return _NestedBackboneGradModel(pre_layers, backbone_grad_model, post_layers)
 
 
 # --------------------------------------------------------------------------
