@@ -73,3 +73,10 @@ results/fair_baseline/predictions/
 results/fair_baseline/histories/
 results/fair_baseline/confusion_matrices/
 results/fair_baseline/figures/
+
+# Phase 4 - calibration figures and the mirrored predictions-used copies are
+# regenerable from checkpoints_local/ + results/fair_baseline/ + the dataset,
+# same convention as Phase 2 above. calibration_metrics.csv/.json and
+# mc_dropout_results.json are small and stay tracked.
+results/calibration/figures/
+results/calibration/predictions_used/
