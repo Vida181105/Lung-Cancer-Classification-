@@ -1,0 +1,58 @@
+[
+  {
+    "model":"MiniConvNet",
+    "stage":"before_temperature",
+    "n_samples":315,
+    "accuracy":0.4952380952,
+    "mean_confidence":0.6608902602,
+    "confidence_minus_accuracy":0.165652,
+    "ece":0.165652165,
+    "brier_score":0.6570211857,
+    "nll":1.2842967357,
+    "temperature":1.0,
+    "notes":"raw model output, no temperature scaling applied",
+    "timestamp":"2026-09-09T17:04:23"
+  },
+  {
+    "model":"VGG16",
+    "stage":"before_temperature",
+    "n_samples":315,
+    "accuracy":0.7714285714,
+    "mean_confidence":0.7717602985,
+    "confidence_minus_accuracy":0.000332,
+    "ece":0.0264909362,
+    "brier_score":0.3247387138,
+    "nll":0.5800757922,
+    "temperature":1.0,
+    "notes":"raw model output, no temperature scaling applied",
+    "timestamp":"2026-09-09T17:04:23"
+  },
+  {
+    "model":"MiniConvNet",
+    "stage":"after_temperature",
+    "n_samples":315,
+    "accuracy":0.4952380952,
+    "mean_confidence":0.6596690348,
+    "confidence_minus_accuracy":0.164431,
+    "ece":0.1644309395,
+    "brier_score":0.6563163687,
+    "nll":1.2818055562,
+    "temperature":1.0055739177,
+    "notes":"T fitted on 72 validation samples; applied to test only",
+    "timestamp":"2026-09-09T17:04:23"
+  },
+  {
+    "model":"VGG16",
+    "stage":"after_temperature",
+    "n_samples":315,
+    "accuracy":0.7714285714,
+    "mean_confidence":0.6658168266,
+    "confidence_minus_accuracy":-0.105612,
+    "ece":0.1206766434,
+    "brier_score":0.3448735704,
+    "nll":0.6244294617,
+    "temperature":1.6519979654,
+    "notes":"T fitted on 72 validation samples; applied to test only",
+    "timestamp":"2026-09-09T17:04:23"
+  }
+]

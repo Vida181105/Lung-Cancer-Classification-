@@ -1,0 +1,46 @@
+{
+  "MiniConvNet": {
+    "n_passes": 15,
+    "n_samples": 315,
+    "mean_accuracy": 0.48253968253968255,
+    "mean_predictive_entropy": 0.8880824446678162,
+    "mean_confidence_variance": 0.013353444635868073,
+    "correct_vs_incorrect": {
+      "correct": {
+        "n": 152,
+        "mean_entropy": 0.6941518187522888,
+        "std_entropy": 0.4281972050666809,
+        "mean_confidence_variance": 0.01219020877033472
+      },
+      "incorrect": {
+        "n": 163,
+        "mean_entropy": 1.0689257383346558,
+        "std_entropy": 0.28429532051086426,
+        "mean_confidence_variance": 0.014438181184232235
+      }
+    },
+    "total_seconds": 9.0
+  },
+  "VGG16": {
+    "n_passes": 15,
+    "n_samples": 315,
+    "mean_accuracy": 0.7714285714285715,
+    "mean_predictive_entropy": 0.7106444239616394,
+    "mean_confidence_variance": 0.043201956897974014,
+    "correct_vs_incorrect": {
+      "correct": {
+        "n": 243,
+        "mean_entropy": 0.6415510177612305,
+        "std_entropy": 0.37695932388305664,
+        "mean_confidence_variance": 0.03897584602236748
+      },
+      "incorrect": {
+        "n": 72,
+        "mean_entropy": 0.9438347220420837,
+        "std_entropy": 0.2354298084974289,
+        "mean_confidence_variance": 0.05746510252356529
+      }
+    },
+    "total_seconds": 264.8
+  }
+}
