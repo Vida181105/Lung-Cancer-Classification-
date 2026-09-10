@@ -1,0 +1,16 @@
+{
+  "MiniConvNet": {
+    "n_benign": 120,
+    "fraction_predicted_tumor": 0.025,
+    "fraction_predicted_normal": 0.975,
+    "mean_confidence": 0.8189170358314489,
+    "note": "Descriptive only, not accuracy-scored - our model was never trained on a benign class, so there is no ground-truth-correct label to score against. This reports the model's behaviour on out-of-distribution benign inputs, not whether that behaviour is 'right'."
+  },
+  "VGG16": {
+    "n_benign": 120,
+    "fraction_predicted_tumor": 0.14166666666666666,
+    "fraction_predicted_normal": 0.858333,
+    "mean_confidence": 0.8818622952300453,
+    "note": "Descriptive only, not accuracy-scored - our model was never trained on a benign class, so there is no ground-truth-correct label to score against. This reports the model's behaviour on out-of-distribution benign inputs, not whether that behaviour is 'right'."
+  }
+}
