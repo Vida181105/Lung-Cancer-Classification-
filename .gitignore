@@ -5,6 +5,7 @@
 Data/
 data/
 lung_colon_image_set
+Data_External_IQOTHNCCD/
 *.zip
 
 # ---------------------------------------------------------------------------
@@ -80,3 +81,10 @@ results/fair_baseline/figures/
 # mc_dropout_results.json are small and stay tracked.
 results/calibration/figures/
 results/calibration/predictions_used/
+
+# Phase 5 - external-eval figures and per-model raw predictions on the external
+# dataset are regenerable from checkpoints_local/ + Data_External_IQOTHNCCD/, same
+# convention as Phases 2 and 4 above. external_eval_metrics.csv/.json and
+# benign_subset_report.json are small and stay tracked.
+results/external_eval/figures/
+results/external_eval/predictions/
