@@ -1,0 +1,14 @@
+{
+  "split_variant": "leakage_controlled_image_group",
+  "source": "pooled over 3 leakage-controlled CV folds",
+  "purpose": "Option B robustness check - not the headline run",
+  "run_name": "cv_leakage_controlled_pooled",
+  "n_samples": 1000,
+  "class_names": [
+    "adenocarcinoma",
+    "large.cell.carcinoma",
+    "normal",
+    "squamous.cell.carcinoma"
+  ],
+  "saved_at": "2026-09-12T14:47:21"
+}

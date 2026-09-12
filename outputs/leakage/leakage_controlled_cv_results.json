@@ -1,0 +1,121 @@
+{
+  "task": "Leakage-controlled 3-fold CV robustness check (Option B)",
+  "purpose": "Confirm or honestly revise confidence in the existing MiniConvNet CV headline, using Phase 1's verified leakage-controlled split. NOT an attempt to improve the reported accuracy.",
+  "per_fold_results": [
+    {
+      "fold": 1,
+      "accuracy": 0.7777777777777778,
+      "f1_macro": 0.7836044327640966,
+      "precision_macro": 0.8026040341152445,
+      "recall_macro": 0.7804454689061125,
+      "cohen_kappa": 0.6955710667737353,
+      "mcc": 0.7017576710729043,
+      "binary_tumor_acc": 0.960960960960961,
+      "subtype_acc": 0.732824427480916,
+      "n_predicted_classes": 4,
+      "epochs_trained": 40,
+      "minutes": 3.56,
+      "status": "ok"
+    },
+    {
+      "fold": 2,
+      "accuracy": 0.6946107784431138,
+      "f1_macro": 0.7058709583053141,
+      "precision_macro": 0.732983409322594,
+      "recall_macro": 0.6895320909937077,
+      "cohen_kappa": 0.5799104775762358,
+      "mcc": 0.5830540919047581,
+      "binary_tumor_acc": 0.9251497005988024,
+      "subtype_acc": 0.683206106870229,
+      "n_predicted_classes": 4,
+      "epochs_trained": 40,
+      "minutes": 4.04,
+      "status": "ok"
+    },
+    {
+      "fold": 3,
+      "accuracy": 0.7507507507507507,
+      "f1_macro": 0.7594495225843422,
+      "precision_macro": 0.7874611656294015,
+      "recall_macro": 0.74671811554079,
+      "cohen_kappa": 0.6572289604881316,
+      "mcc": 0.6640069452700171,
+      "binary_tumor_acc": 0.975975975975976,
+      "subtype_acc": 0.7011494252873564,
+      "n_predicted_classes": 4,
+      "epochs_trained": 40,
+      "minutes": 3.92,
+      "status": "ok"
+    }
+  ],
+  "summary": {
+    "accuracy_mean": 0.7410464356572142,
+    "accuracy_std": 0.042424258899348866,
+    "f1_macro_mean": 0.7496416378845843,
+    "f1_macro_std": 0.039784032155770206,
+    "cohen_kappa_mean": 0.6442368349460342,
+    "mcc_mean": 0.6496062360825597,
+    "binary_tumor_acc_mean": 0.9540288791785798,
+    "subtype_acc_mean": 0.7057266532128338,
+    "n_folds_valid": 3,
+    "n_folds_total": 3,
+    "n_folds_excluded_collapsed": 0,
+    "n_folds_excluded_partial_collapse": 0,
+    "params": 499172
+  },
+  "comparison_to_headline": {
+    "leakage_controlled_accuracy_mean": 0.7410464356572142,
+    "leakage_controlled_accuracy_std": 0.042424258899348866,
+    "headline_accuracy_mean": 0.705936,
+    "headline_accuracy_std": 0.119965,
+    "difference": 0.03511,
+    "within_headline_std_dev": true,
+    "headline_source": "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\outputs\\results_table.csv ('MiniConvNet (3-fold CV)' row, live)",
+    "verdict": "The leakage-controlled result is WITHIN the original headline's own standard deviation - i.e. not a meaningfully different result given the noise already present in a 3-fold estimate. This is consistent with (though does not by itself prove) the original 70.59% figure being reasonably robust to the leakage found in Phase 1."
+  },
+  "group_leakage_check_on_folds": {
+    "clean": true,
+    "violations": [],
+    "n_folds_checked": 3
+  },
+  "written_at": "2026-09-12T14:47:22",
+  "pooled_confusion_matrix": [
+    [
+      266,
+      21,
+      11,
+      40
+    ],
+    [
+      42,
+      127,
+      2,
+      16
+    ],
+    [
+      28,
+      0,
+      187,
+      0
+    ],
+    [
+      84,
+      10,
+      5,
+      161
+    ]
+  ],
+  "pooled_breakdown": {
+    "binary_tumor_vs_healthy_accuracy": 0.954,
+    "subtype_accuracy_all_tumors": 0.7057324840764331,
+    "subtype_accuracy_given_detected_tumor": 0.7222946544980443,
+    "n_tumor_samples": 785,
+    "over_prediction_by_class": {
+      "adenocarcinoma": 82,
+      "large.cell.carcinoma": -29,
+      "normal": -10,
+      "squamous.cell.carcinoma": -43
+    },
+    "most_over_predicted_class": "adenocarcinoma"
+  }
+}
