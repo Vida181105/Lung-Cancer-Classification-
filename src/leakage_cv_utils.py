@@ -42,6 +42,12 @@ SPLIT_ASSIGNMENTS_CSV = LEAKAGE_DIR / "split_assignments.csv"
 LEAKAGE_CONTROLLED_CV_RESULTS_CSV = LEAKAGE_DIR / "leakage_controlled_cv_results.csv"
 LEAKAGE_CONTROLLED_CV_RESULTS_JSON = LEAKAGE_DIR / "leakage_controlled_cv_results.json"
 
+# BatchNorm-ablation output - a separate pair of files (never overwrites Option
+# B's own results above). Added for the BatchNorm-vs-Option-B comparison; not
+# used by anything else in this module.
+LEAKAGE_CONTROLLED_CV_BATCHNORM_RESULTS_CSV = LEAKAGE_DIR / "leakage_controlled_cv_batchnorm_results.csv"
+LEAKAGE_CONTROLLED_CV_BATCHNORM_RESULTS_JSON = LEAKAGE_DIR / "leakage_controlled_cv_batchnorm_results.json"
+
 REQUIRED_COLUMNS = ["filepath", "filename", "class", "label", "split", "hash",
                    "image_group", "split_variant"]
 EXPECTED_SPLIT_VARIANT = "leakage_controlled_image_group"
@@ -188,6 +194,89 @@ def compare_to_headline(leakage_controlled_summary: dict, headline: dict = None)
     }
 
 
+def load_option_b_reference() -> dict:
+    """Option B's own leakage-controlled 3-fold-CV result, read live from
+    `outputs/leakage/leakage_controlled_cv_results.json` wherever possible -
+    never a silently-stale hardcoded number, mirroring
+    :func:`load_headline_reference`'s pattern for a different reference file.
+
+    This is the correct comparison point for the BatchNorm ablation (which
+    must be compared against Option B's leakage-controlled result, not the
+    original pooled-CV headline) - `outputs/leakage/
+    leakage_controlled_cv_results.json` is only ever READ here, never written.
+    """
+    if LEAKAGE_CONTROLLED_CV_RESULTS_JSON.exists():
+        with open(LEAKAGE_CONTROLLED_CV_RESULTS_JSON) as fh:
+            payload = json.load(fh)
+        s = payload.get("summary", {})
+        if "accuracy_mean" in s:
+            return {
+                "accuracy_mean": float(s["accuracy_mean"]), "accuracy_std": float(s["accuracy_std"]),
+                "f1_macro_mean": float(s.get("f1_macro_mean", float("nan"))),
+                "binary_tumor_acc": float(s.get("binary_tumor_acc_mean", float("nan"))),
+                "subtype_acc": float(s.get("subtype_acc_mean", float("nan"))),
+                "source": f"{LEAKAGE_CONTROLLED_CV_RESULTS_JSON} ('summary' block, live)",
+            }
+    return dict(_FALLBACK_OPTION_B)
+
+
+def compare_to_option_b(batchnorm_summary: dict, option_b: dict = None) -> dict:
+    """Side-by-side comparison of the BatchNorm variant against Option B's
+    own leakage-controlled result - same shape and logic as
+    :func:`compare_to_headline`, kept as a separate function rather than
+    reused directly so the printed verdict text refers to the correct
+    comparison point (Option B, not the original pooled-CV headline) instead
+    of a misleadingly-worded reused message.
+
+    Neither direction is framed as a failure: BatchNorm doing nothing, or
+    making things slightly worse, is exactly as reportable a result as an
+    improvement - see the ``verdict`` text.
+    """
+    option_b = option_b or load_option_b_reference()
+    bn_acc = batchnorm_summary["accuracy_mean"]
+    bn_std = batchnorm_summary["accuracy_std"]
+    diff = bn_acc - option_b["accuracy_mean"]
+    within_option_b_std = abs(diff) <= option_b["accuracy_std"]
+
+    return {
+        "batchnorm_accuracy_mean": bn_acc, "batchnorm_accuracy_std": bn_std,
+        "option_b_accuracy_mean": option_b["accuracy_mean"],
+        "option_b_accuracy_std": option_b["accuracy_std"],
+        "difference": round(diff, 6),
+        "within_option_b_std_dev": bool(within_option_b_std),
+        "option_b_source": option_b["source"],
+        "verdict": (
+            "BatchNorm's result is WITHIN Option B's own standard deviation - i.e. not a "
+            "meaningfully different result given the noise already present in a 3-fold "
+            "estimate. BatchNorm neither helps nor hurts in any way distinguishable from "
+            "ordinary fold-to-fold variance for this architecture and dataset size."
+            if within_option_b_std else
+            ("BatchNorm's result falls OUTSIDE Option B's own standard deviation, ABOVE it - a "
+             "genuine, notable improvement, not noise. This is evidence BatchNorm helps training "
+             "stability or accuracy for this architecture, beyond what the existing anti-collapse "
+             "measures (LeakyReLU, He init, the widened bottleneck) already provide."
+             if diff > 0 else
+             "BatchNorm's result falls OUTSIDE Option B's own standard deviation, BELOW it - a "
+             "genuine, notable regression, not noise. Report this plainly: BatchNorm measurably "
+             "hurts this architecture at this dataset size, most plausibly because "
+             "BatchNorm's running-statistics estimates are noisy with the small per-fold batch "
+             "counts here, adding instability rather than removing it. This is a legitimate, "
+             "informative ablation result, not a failed experiment.")
+        ),
+    }
+
+
+# Fallback if outputs/leakage/leakage_controlled_cv_results.json is absent on
+# the machine running the BatchNorm ablation - the value on record at the time
+# this fallback was written (see git history for provenance).
+_FALLBACK_OPTION_B = {
+    "accuracy_mean": 0.7410464356572142, "accuracy_std": 0.042424258899348866,
+    "f1_macro_mean": 0.7496416378845843, "binary_tumor_acc": 0.9540288791785798,
+    "subtype_acc": 0.7057266532128338,
+    "source": "hardcoded fallback (outputs/leakage/leakage_controlled_cv_results.json not found)",
+}
+
+
 # --------------------------------------------------------------------------
 # STEP 3 / 6 - artefact writing (new files only, never overwrites results_table.csv)
 # --------------------------------------------------------------------------
@@ -195,18 +284,33 @@ def compare_to_headline(leakage_controlled_summary: dict, headline: dict = None)
 
 def write_leakage_controlled_cv_results(per_fold_df: pd.DataFrame, summary: dict,
                                         comparison: dict, group_leakage_check: dict,
-                                        extra: dict = None) -> dict:
-    """Write the two new, clearly-labelled output files this task specifies.
-    Never touches `outputs/results_table.csv` or any other existing results
-    file."""
+                                        extra: dict = None, csv_path=None, json_path=None,
+                                        task_label=None, purpose_text=None) -> dict:
+    """Write the leakage-controlled-CV output files.
+
+    Defaults to Option B's own file pair
+    (``LEAKAGE_CONTROLLED_CV_RESULTS_CSV``/``_JSON``) exactly as before, so
+    every existing caller (e.g. `notebooks/14_leakage_controlled_cv.ipynb`)
+    is completely unaffected. ``csv_path``/``json_path`` let a different
+    caller (e.g. the BatchNorm ablation) redirect output to its own,
+    separately-named files instead of overwriting Option B's - pass
+    :data:`LEAKAGE_CONTROLLED_CV_BATCHNORM_RESULTS_CSV`/``_JSON`` for that.
+    ``task_label``/``purpose_text`` similarly override the JSON payload's
+    descriptive fields so a different ablation's file doesn't claim to be
+    "Option B" internally.
+    """
+    csv_path = Path(csv_path or LEAKAGE_CONTROLLED_CV_RESULTS_CSV)
+    json_path = Path(json_path or LEAKAGE_CONTROLLED_CV_RESULTS_JSON)
+
     LEAKAGE_DIR.mkdir(parents=True, exist_ok=True)
-    per_fold_df.to_csv(LEAKAGE_CONTROLLED_CV_RESULTS_CSV, index=False)
+    per_fold_df.to_csv(csv_path, index=False)
 
     payload = {
-        "task": "Leakage-controlled 3-fold CV robustness check (Option B)",
-        "purpose": ("Confirm or honestly revise confidence in the existing MiniConvNet CV "
-                   "headline, using Phase 1's verified leakage-controlled split. NOT an "
-                   "attempt to improve the reported accuracy."),
+        "task": task_label or "Leakage-controlled 3-fold CV robustness check (Option B)",
+        "purpose": purpose_text or (
+            "Confirm or honestly revise confidence in the existing MiniConvNet CV "
+            "headline, using Phase 1's verified leakage-controlled split. NOT an "
+            "attempt to improve the reported accuracy."),
         "per_fold_results": per_fold_df.to_dict(orient="records"),
         "summary": summary,
         "comparison_to_headline": comparison,
@@ -215,15 +319,21 @@ def write_leakage_controlled_cv_results(per_fold_df: pd.DataFrame, summary: dict
     }
     if extra:
         payload.update(extra)
-    with open(LEAKAGE_CONTROLLED_CV_RESULTS_JSON, "w") as fh:
+    with open(json_path, "w") as fh:
         json.dump(payload, fh, indent=2, default=str)
 
-    return {"csv": str(LEAKAGE_CONTROLLED_CV_RESULTS_CSV),
-           "json": str(LEAKAGE_CONTROLLED_CV_RESULTS_JSON)}
+    return {"csv": str(csv_path), "json": str(json_path)}
 
 
 def load_leakage_controlled_cv_results() -> dict:
     if not LEAKAGE_CONTROLLED_CV_RESULTS_JSON.exists():
         return {}
     with open(LEAKAGE_CONTROLLED_CV_RESULTS_JSON) as fh:
+        return json.load(fh)
+
+
+def load_batchnorm_cv_results() -> dict:
+    if not LEAKAGE_CONTROLLED_CV_BATCHNORM_RESULTS_JSON.exists():
+        return {}
+    with open(LEAKAGE_CONTROLLED_CV_BATCHNORM_RESULTS_JSON) as fh:
         return json.load(fh)
