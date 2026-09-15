@@ -715,20 +715,19 @@ def evaluate_checkpoint_on_split(checkpoint_path, split_df, split="test",
     an *upper bound* on leakage-controlled performance, not a clean estimate.
     The only clean estimate comes from retraining under the new split.
     """
-    import tensorflow as tf
-
     from src.config import BATCH_SIZE
     from src.data_utils import make_dataset
     from src.evaluate_utils import (compute_metrics, confusion, detect_collapse,
                                     per_class_report, predict, save_predictions,
                                     tumor_vs_subtype_breakdown)
+    from src.models import load_model_checkpoint
 
     frame = split_df[split_df["split"] == split].reset_index(drop=True)
     if frame.empty:
         raise ValueError(f"split '{split}' is empty")
 
     ds = make_dataset(frame, batch_size=batch_size or BATCH_SIZE, one_hot=one_hot)
-    model = tf.keras.models.load_model(checkpoint_path)      # load only
+    model = load_model_checkpoint(checkpoint_path)           # load only
     y_true, y_pred, y_prob = predict(model, ds)
 
     metrics = compute_metrics(y_true, y_pred, y_prob)
@@ -744,6 +743,7 @@ def evaluate_checkpoint_on_split(checkpoint_path, split_df, split="test",
                            "evaluated_split": split,
                            "caveat": ("checkpoint was trained on the ORIGINAL split; "
                                       "this is an upper bound, not a clean estimate")})
+    import tensorflow as tf
     tf.keras.backend.clear_session()
 
     return {

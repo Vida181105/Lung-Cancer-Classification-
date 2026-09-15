@@ -113,17 +113,16 @@ def generate_predictions_via_forward_pass(checkpoint_path, split_df, split_name,
     split. This is inference, not training - there is no ``.fit()`` call
     here, only ``tf.keras.models.load_model`` + prediction.
     """
-    import tensorflow as tf
-
     from src.data_utils import make_dataset
     from src.evaluate_utils import predict
+    from src.models import load_model_checkpoint
 
     frame = split_df[split_df["split"] == split_name].reset_index(drop=True)
     if frame.empty:
         raise ValueError(f"split '{split_name}' is empty in the supplied split dataframe.")
 
     ds = make_dataset(frame, batch_size=batch_size or BATCH_SIZE, one_hot=one_hot)
-    model = tf.keras.models.load_model(str(checkpoint_path))
+    model = load_model_checkpoint(checkpoint_path)
     y_true, y_pred, y_prob = predict(model, ds)
     return y_true, y_pred, y_prob, model, frame
 
@@ -705,8 +704,17 @@ def plot_uncertainty_vs_correctness(mc_result: dict, model_name, save=True, show
     labels = [f"correct (n={int(correct.sum())})", f"incorrect (n={int((~correct).sum())})"]
 
     fig, ax = plt.subplots(figsize=(6, 4.5))
-    bp = ax.boxplot([g for g in groups if len(g)], labels=[l for l, g in zip(labels, groups) if len(g)],
-                    patch_artist=True)
+    nonempty_groups = [g for g in groups if len(g)]
+    nonempty_labels = [l for l, g in zip(labels, groups) if len(g)]
+    # Matplotlib 3.9 renamed ``labels`` to ``tick_labels``.  Support both
+    # APIs so the notebook runs with either the Python 3.12 environment or
+    # older course/project environments.
+    try:
+        bp = ax.boxplot(nonempty_groups, tick_labels=nonempty_labels,
+                        patch_artist=True)
+    except TypeError:
+        bp = ax.boxplot(nonempty_groups, labels=nonempty_labels,
+                        patch_artist=True)
     for patch, color in zip(bp["boxes"], ["#4c78a8", "#e45756"]):
         patch.set_facecolor(color); patch.set_alpha(0.6)
     ax.set_ylabel("predictive entropy (MC Dropout mean)")
