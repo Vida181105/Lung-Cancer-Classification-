@@ -1,0 +1,17 @@
+{
+  "split_variant": "leakage_controlled_image_group",
+  "fold": 3,
+  "activation": "leaky_relu",
+  "label_smoothing": 0.05,
+  "use_batchnorm": true,
+  "purpose": "BatchNorm ablation - compared against Option B, not the original headline",
+  "run_name": "cv_leakage_controlled_batchnorm_fold3",
+  "n_samples": 333,
+  "class_names": [
+    "adenocarcinoma",
+    "large.cell.carcinoma",
+    "normal",
+    "squamous.cell.carcinoma"
+  ],
+  "saved_at": "2026-09-13T15:28:18"
+}

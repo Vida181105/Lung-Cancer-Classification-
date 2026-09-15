@@ -196,6 +196,46 @@ def architecture_summary(model) -> dict:
 DEFAULT_BASELINES = ["ResNet50", "VGG16", "MobileNetV3Small", "EfficientNetV2B0"]
 
 
+def load_model_checkpoint(checkpoint_path, *, compile=False):
+    """Load a project checkpoint, including legacy baseline checkpoints.
+
+    Older baseline checkpoints contain ``Lambda(preprocess_input)``.  Keras 3
+    serializes that callable only as ``"preprocess_input"``, which is
+    ambiguous and consequently cannot be restored without a custom object.
+    Read the checkpoint configuration to determine the embedded backbone and
+    provide its corresponding preprocessing callable.
+
+    New code should use this function rather than calling ``load_model``
+    directly when a checkpoint might be a transfer-learning baseline.
+    """
+    import zipfile
+    from pathlib import Path
+
+    import tensorflow as tf
+
+    path = Path(checkpoint_path)
+    custom_objects = {}
+
+    # A .keras file is a zip archive.  Only its small JSON config is inspected;
+    # weights are still read by Keras itself.
+    if path.is_file() and zipfile.is_zipfile(path):
+        with zipfile.ZipFile(path) as archive:
+            try:
+                config_text = archive.read("config.json").decode("utf-8")
+            except KeyError:
+                config_text = ""
+        config_lower = config_text.lower()
+        for name in DEFAULT_BASELINES:
+            if name.lower() in config_lower:
+                _, preprocess_input = _baseline_spec(name)
+                custom_objects["preprocess_input"] = preprocess_input
+                break
+
+    return tf.keras.models.load_model(
+        str(path), custom_objects=custom_objects or None, compile=compile
+    )
+
+
 def _baseline_spec(name):
     """Return ``(constructor, preprocess_input)`` for a baseline name."""
     from tensorflow.keras import applications as apps
