@@ -88,3 +88,12 @@ results/calibration/predictions_used/
 # benign_subset_report.json are small and stay tracked.
 results/external_eval/figures/
 results/external_eval/predictions/
+
+# Phase 6 - uncertainty/selective-prediction figures and the mirrored
+# predictions-used copies (per model, internal + external) are regenerable
+# from checkpoints_local/ + Data_External_IQOTHNCCD/ + the existing internal
+# split, same convention as Phases 2/4/5 above. uncertainty_metrics.csv/.json,
+# selective_prediction_results.csv, and final_results_table.csv/.json are
+# small and stay tracked.
+results/uncertainty/*/figures/
+results/uncertainty/*/predictions_used/

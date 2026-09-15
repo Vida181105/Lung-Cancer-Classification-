@@ -434,6 +434,87 @@ def has_batchnorm(model) -> bool:
     return _walk(model)
 
 
+def mc_dropout_raw_passes(model, dataset, n_passes=15, seed=SEED, verbose=True) -> dict:
+    """The generic stochastic-forward-pass CORE of MC Dropout (Gal &
+    Ghahramani, 2016) - ``n_passes`` forward passes with Dropout active
+    (``training=True``), producing a predictive mean, predictive entropy, and
+    per-sample confidence variance/std across passes, over WHATEVER label
+    space ``dataset`` happens to yield.
+
+    **This is inference only - there is no gradient computation, no optimizer
+    step, and no weight update anywhere in this function.** ``training=True``
+    here controls layer BEHAVIOUR (Dropout masking, BatchNorm statistics), not
+    whether training happens.
+
+    Raises if the model contains any BatchNormalization layer (see
+    :func:`has_batchnorm`) rather than silently producing a contaminated
+    result.
+
+    Deliberately does NOT compute a "correct" field, unlike
+    :func:`mc_dropout_predict` (below, which wraps this and adds that field
+    for the internal 4-class task it was built for). This split exists so the
+    exact same stochastic mechanism can be reused for the Phase 6
+    uncertainty/selective-prediction experiment's EXTERNAL evaluation
+    (``src/uncertainty_utils.mc_dropout_external``), where the dataset yields
+    3-class IQ-OTH/NCCD labels that are not index-comparable to a 4-class
+    ``argmax`` - "correctness" there has to be computed after reducing to the
+    binary task, by a caller that knows about that reduction, not baked in
+    here. This is a pure extraction for reuse: :func:`mc_dropout_predict`'s
+    own public return value is unchanged by this refactor.
+
+    Returns ``{n_passes, n_samples, y_labels, mean_probs, y_pred_mean,
+    predictive_entropy, confidence_variance, confidence_std, stacked_probs}``
+    - ``y_labels`` is named generically (not ``y_true``) because, for the
+    external caller, it is not a "ground truth" in the same label space as
+    ``mean_probs``'s columns.
+    """
+    import tensorflow as tf
+
+    if has_batchnorm(model):
+        raise RuntimeError(
+            "model contains BatchNormalization layer(s); running with training=True to keep "
+            "Dropout active would ALSO perturb BatchNorm's batch statistics, contaminating the "
+            "uncertainty estimate. MC Dropout is not attempted for this model.")
+
+    tf.random.set_seed(seed)
+    per_pass_probs = []
+    y_labels = None
+
+    for p in range(n_passes):
+        batch_probs, batch_labels = [], []
+        for x, y in dataset:
+            out = model(x, training=True)                 # Dropout stays active
+            batch_probs.append(out.numpy())
+            y_arr = y.numpy()
+            if y_arr.ndim > 1:                              # one-hot -> sparse
+                y_arr = np.argmax(y_arr, axis=1)
+            batch_labels.append(y_arr)
+        per_pass_probs.append(np.concatenate(batch_probs, axis=0))
+        if p == 0:
+            y_labels = np.concatenate(batch_labels, axis=0)
+        if verbose:
+            print(f"    MC Dropout pass {p + 1}/{n_passes} done "
+                 f"({len(per_pass_probs[-1])} samples)")
+
+    stacked = np.stack(per_pass_probs, axis=0)              # [passes, samples, classes]
+    mean_probs = stacked.mean(axis=0)
+    y_pred_mean = mean_probs.argmax(axis=1)
+
+    eps = 1e-12
+    predictive_entropy = -np.sum(mean_probs * np.log(mean_probs + eps), axis=1)
+    winning_class_probs_per_pass = stacked[:, np.arange(len(y_pred_mean)), y_pred_mean]
+    confidence_variance = winning_class_probs_per_pass.var(axis=0)
+    confidence_std = winning_class_probs_per_pass.std(axis=0)
+
+    return {
+        "n_passes": int(n_passes), "n_samples": int(len(y_labels)),
+        "y_labels": y_labels, "mean_probs": mean_probs, "y_pred_mean": y_pred_mean,
+        "predictive_entropy": predictive_entropy,
+        "confidence_variance": confidence_variance, "confidence_std": confidence_std,
+        "stacked_probs": stacked,
+    }
+
+
 def mc_dropout_predict(model, dataset, n_passes=15, seed=SEED, verbose=True) -> dict:
     """``n_passes`` stochastic forward passes with Dropout active
     (``training=True``), producing a predictive mean, predictive entropy, and
@@ -449,51 +530,23 @@ def mc_dropout_predict(model, dataset, n_passes=15, seed=SEED, verbose=True) -> 
     :func:`has_batchnorm`) rather than silently producing a contaminated
     result - if that happens for a given model, the caller should report MC
     Dropout as skipped for it, with the reason, per Step 5's brief.
+
+    Implemented via :func:`mc_dropout_raw_passes` (added for Phase 6 reuse on
+    the external dataset) - this function's own return value, keys, and
+    numeric behaviour are UNCHANGED by that refactor: same seeding, same loop
+    order, same formulas, same dict shape as before.
     """
-    import tensorflow as tf
+    raw = mc_dropout_raw_passes(model, dataset, n_passes=n_passes, seed=seed, verbose=verbose)
 
-    if has_batchnorm(model):
-        raise RuntimeError(
-            "model contains BatchNormalization layer(s); running with training=True to keep "
-            "Dropout active would ALSO perturb BatchNorm's batch statistics, contaminating the "
-            "uncertainty estimate. MC Dropout is not attempted for this model.")
-
-    tf.random.set_seed(seed)
-    per_pass_probs = []
-    y_true = None
-
-    for p in range(n_passes):
-        batch_probs, batch_true = [], []
-        for x, y in dataset:
-            out = model(x, training=True)                 # Dropout stays active
-            batch_probs.append(out.numpy())
-            y_arr = y.numpy()
-            if y_arr.ndim > 1:                              # one-hot -> sparse
-                y_arr = np.argmax(y_arr, axis=1)
-            batch_true.append(y_arr)
-        per_pass_probs.append(np.concatenate(batch_probs, axis=0))
-        if p == 0:
-            y_true = np.concatenate(batch_true, axis=0)
-        if verbose:
-            print(f"    MC Dropout pass {p + 1}/{n_passes} done "
-                 f"({len(per_pass_probs[-1])} samples)")
-
-    stacked = np.stack(per_pass_probs, axis=0)              # [passes, samples, classes]
-    mean_probs = stacked.mean(axis=0)
-    y_pred_mean = mean_probs.argmax(axis=1)
+    y_true = raw["y_labels"]
+    y_pred_mean = raw["y_pred_mean"]
     correct = (y_pred_mean == y_true)
 
-    eps = 1e-12
-    predictive_entropy = -np.sum(mean_probs * np.log(mean_probs + eps), axis=1)
-    winning_class_probs_per_pass = stacked[:, np.arange(len(y_pred_mean)), y_pred_mean]
-    confidence_variance = winning_class_probs_per_pass.var(axis=0)
-    confidence_std = winning_class_probs_per_pass.std(axis=0)
-
     return {
-        "n_passes": int(n_passes), "n_samples": int(len(y_true)),
-        "y_true": y_true, "y_pred_mean": y_pred_mean, "mean_probs": mean_probs,
-        "predictive_entropy": predictive_entropy,
-        "confidence_variance": confidence_variance, "confidence_std": confidence_std,
+        "n_passes": raw["n_passes"], "n_samples": raw["n_samples"],
+        "y_true": y_true, "y_pred_mean": y_pred_mean, "mean_probs": raw["mean_probs"],
+        "predictive_entropy": raw["predictive_entropy"],
+        "confidence_variance": raw["confidence_variance"], "confidence_std": raw["confidence_std"],
         "correct": correct,
     }
 
