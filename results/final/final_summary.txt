@@ -1,0 +1,74 @@
+FINAL RESULTS SUMMARY
+============================================================
+Generated: 2026-09-15T14:54:06
+
+Primary model  : MiniConvNet (miniconvnet_single_run)
+Secondary model: VGG16 (vgg16_runB_finetuned)
+
+CHECKPOINT SUBSTITUTION DISCLOSURE:
+MiniConvNet results in this analysis use the SINGLE-RUN checkpoint (checkpoints_local/miniconvnet_single_run.keras, internal faithful-split test accuracy 49.52% - see results/calibration/calibration_metrics.csv), the SAME instance already analysed in Phases 3-4 (Grad-CAM, calibration) - NOT a checkpoint specifically derived from the leakage-controlled 3-fold CV (74.10% +/- 4.24%, outputs/leakage/leakage_controlled_cv_results.json), which never produced a standalone saved model (confirmed: no .save() call exists anywhere in src/leakage_cv_utils.py or notebook 14 - it was built to report aggregate per-fold metrics only). This is a disclosed, deliberate substitution: the research question here (does uncertainty flag likely-wrong predictions) does not depend on which specific MiniConvNet training run is used, as long as it is stated clearly which one was.
+
+--- MiniConvNet ---
+  parameters: 499172
+  internal_accuracy_this_checkpoint: 0.4952380952380952
+  internal_accuracy_source: C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Lung-Cancer-Classification-\results\calibration\calibration_metrics.csv (this checkpoint's own test-set accuracy)
+  internal_cv_headline_accuracy: 0.705936
+  internal_cv_headline_std: 0.119965
+  leakage_controlled_accuracy: 0.7410464356572142
+  leakage_controlled_std: 0.0424242588993488
+  leakage_controlled_note: nan
+  external_accuracy: 0.4605936540429887
+  external_auc: 0.5222687851364322
+  external_malignant_recall: 0.0819964349376114
+  ece: 0.1656521649587722
+  brier_score: 0.657021185749918
+  mean_uncertainty_internal: 0.8880824446678162
+  uncertainty_error_relationship: higher entropy for incorrect (delta=+0.3541)
+  selective_prediction_performance: at 80% coverage: error 53.9% -> 52.9%
+
+--- VGG16 ---
+  parameters: 14780868
+  internal_accuracy_this_checkpoint: 0.7714285714285715
+  internal_accuracy_source: C:\Users\shrey\Downloads\MIP_project_part2\Lung-Cancer-Classification-\Lung-Cancer-Classification-\results\calibration\calibration_metrics.csv (this checkpoint's own test-set accuracy)
+  internal_cv_headline_accuracy: 0.7714285714285715
+  internal_cv_headline_std: nan
+  leakage_controlled_accuracy: nan
+  leakage_controlled_std: nan
+  leakage_controlled_note: Leakage-controlled (Option B) 3-fold CV was run for MiniConvNet only - not attempted for baselines.
+  external_accuracy: 0.5609007164790174
+  external_auc: 0.641239887563417
+  external_malignant_recall: 0.3351158645276292
+  ece: 0.0264909362036084
+  brier_score: 0.3247387137912074
+  mean_uncertainty_internal: 0.7106444239616394
+  uncertainty_error_relationship: higher entropy for incorrect (delta=+0.3033)
+  selective_prediction_performance: at 80% coverage: error 43.9% -> 41.2%
+
+Tables produced:
+  [OK     ] model_comparison.csv
+  [OK     ] internal_results.csv
+  [OK     ] external_results.csv
+  [OK     ] calibration_results.csv
+  [OK     ] uncertainty_results.csv
+  [OK     ] selective_prediction_results.csv
+  [OK     ] per_image_predictions.csv
+
+Figures produced:
+  [OK     ] 01_model_accuracy
+  [OK     ] 02_internal_vs_external
+  [OK     ] 03_malignant_recall
+  [OK     ] 04-05_confusion_MiniConvNet
+  [OK     ] 04-05_confusion_VGG16
+  [OK     ] 06-07_roc_MiniConvNet
+  [OK     ] 06-07_roc_VGG16
+  [OK     ] 08-09_calibration_MiniConvNet
+  [OK     ] 08-09_calibration_VGG16
+  [OK     ] 10_confidence_correctness
+  [OK     ] 11_entropy_correctness
+  [OK     ] 12_uncertainty_error
+  [OK     ] 13-14_risk_coverage_MiniConvNet
+  [OK     ] 13-14_risk_coverage_VGG16
+  [OK     ] 15_internal_external_uncertainty
+  [OK     ] 16_high_confidence_errors
+  [OK     ] 17_gradcam_examples
+  [OK     ] 18_gradcam_plusplus_examples

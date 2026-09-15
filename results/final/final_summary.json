@@ -1,0 +1,222 @@
+{
+  "generated_at": "2026-09-15T14:54:06",
+  "generated_by": "src/generate_final_results.py (pure post-processing, no inference performed)",
+  "models": {
+    "primary": {
+      "name": "MiniConvNet",
+      "run_name": "miniconvnet_single_run",
+      "checkpoint": "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\checkpoints_local\\miniconvnet_single_run.keras"
+    },
+    "secondary": {
+      "name": "VGG16",
+      "run_name": "vgg16_runB_finetuned",
+      "checkpoint": "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\checkpoints_local\\vgg16_runB_finetuned.keras"
+    }
+  },
+  "leakage_controlled_checkpoint_substitution": "MiniConvNet results in this analysis use the SINGLE-RUN checkpoint (checkpoints_local/miniconvnet_single_run.keras, internal faithful-split test accuracy 49.52% - see results/calibration/calibration_metrics.csv), the SAME instance already analysed in Phases 3-4 (Grad-CAM, calibration) - NOT a checkpoint specifically derived from the leakage-controlled 3-fold CV (74.10% +/- 4.24%, outputs/leakage/leakage_controlled_cv_results.json), which never produced a standalone saved model (confirmed: no .save() call exists anywhere in src/leakage_cv_utils.py or notebook 14 - it was built to report aggregate per-fold metrics only). This is a disclosed, deliberate substitution: the research question here (does uncertainty flag likely-wrong predictions) does not depend on which specific MiniConvNet training run is used, as long as it is stated clearly which one was.",
+  "per_model": [
+    {
+      "model": "MiniConvNet",
+      "parameters": 499172,
+      "internal_accuracy_this_checkpoint": 0.4952380952380952,
+      "internal_accuracy_source": "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\results\\calibration\\calibration_metrics.csv (this checkpoint's own test-set accuracy)",
+      "internal_cv_headline_accuracy": 0.705936,
+      "internal_cv_headline_std": 0.119965,
+      "leakage_controlled_accuracy": 0.7410464356572142,
+      "leakage_controlled_std": 0.0424242588993488,
+      "leakage_controlled_note": NaN,
+      "external_accuracy": 0.4605936540429887,
+      "external_auc": 0.5222687851364322,
+      "external_malignant_recall": 0.0819964349376114,
+      "ece": 0.1656521649587722,
+      "brier_score": 0.657021185749918,
+      "mean_uncertainty_internal": 0.8880824446678162,
+      "uncertainty_error_relationship": "higher entropy for incorrect (delta=+0.3541)",
+      "selective_prediction_performance": "at 80% coverage: error 53.9% -> 52.9%"
+    },
+    {
+      "model": "VGG16",
+      "parameters": 14780868,
+      "internal_accuracy_this_checkpoint": 0.7714285714285715,
+      "internal_accuracy_source": "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\results\\calibration\\calibration_metrics.csv (this checkpoint's own test-set accuracy)",
+      "internal_cv_headline_accuracy": 0.7714285714285715,
+      "internal_cv_headline_std": NaN,
+      "leakage_controlled_accuracy": NaN,
+      "leakage_controlled_std": NaN,
+      "leakage_controlled_note": "Leakage-controlled (Option B) 3-fold CV was run for MiniConvNet only - not attempted for baselines.",
+      "external_accuracy": 0.5609007164790174,
+      "external_auc": 0.641239887563417,
+      "external_malignant_recall": 0.3351158645276292,
+      "ece": 0.0264909362036084,
+      "brier_score": 0.3247387137912074,
+      "mean_uncertainty_internal": 0.7106444239616394,
+      "uncertainty_error_relationship": "higher entropy for incorrect (delta=+0.3033)",
+      "selective_prediction_performance": "at 80% coverage: error 43.9% -> 41.2%"
+    }
+  ],
+  "tables": {
+    "model_comparison.csv": {
+      "status": "ok",
+      "path": "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\results\\final\\model_comparison.csv",
+      "n_rows": 2
+    },
+    "internal_results.csv": {
+      "status": "ok",
+      "path": "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\results\\final\\internal_results.csv",
+      "n_rows": 2
+    },
+    "external_results.csv": {
+      "status": "ok",
+      "path": "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\results\\final\\external_results.csv",
+      "n_rows": 6
+    },
+    "calibration_results.csv": {
+      "status": "ok",
+      "path": "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\results\\final\\calibration_results.csv",
+      "n_rows": 4
+    },
+    "uncertainty_results.csv": {
+      "status": "ok",
+      "path": "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\results\\final\\uncertainty_results.csv",
+      "n_rows": 4
+    },
+    "selective_prediction_results.csv": {
+      "status": "ok",
+      "path": "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\results\\final\\selective_prediction_results.csv",
+      "n_rows": 40
+    },
+    "per_image_predictions.csv": {
+      "status": "ok",
+      "path": "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\results\\final\\per_image_predictions.csv",
+      "n_rows": 2584
+    }
+  },
+  "figures": {
+    "01_model_accuracy": {
+      "status": "ok",
+      "paths": [
+        "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\figures\\final\\01_model_accuracy.png",
+        "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\figures\\final\\01_model_accuracy.pdf"
+      ]
+    },
+    "02_internal_vs_external": {
+      "status": "ok",
+      "paths": [
+        "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\figures\\final\\02_internal_vs_external.png",
+        "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\figures\\final\\02_internal_vs_external.pdf"
+      ]
+    },
+    "03_malignant_recall": {
+      "status": "ok",
+      "paths": [
+        "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\figures\\final\\03_malignant_recall.png",
+        "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\figures\\final\\03_malignant_recall.pdf"
+      ]
+    },
+    "04-05_confusion_MiniConvNet": {
+      "status": "ok",
+      "paths": [
+        "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\figures\\final\\04_confusion_miniconvnet.png",
+        "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\figures\\final\\04_confusion_miniconvnet.pdf"
+      ]
+    },
+    "04-05_confusion_VGG16": {
+      "status": "ok",
+      "paths": [
+        "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\figures\\final\\05_confusion_vgg16.png",
+        "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\figures\\final\\05_confusion_vgg16.pdf"
+      ]
+    },
+    "06-07_roc_MiniConvNet": {
+      "status": "ok",
+      "paths": [
+        "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\figures\\final\\06_roc_miniconvnet.png",
+        "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\figures\\final\\06_roc_miniconvnet.pdf"
+      ]
+    },
+    "06-07_roc_VGG16": {
+      "status": "ok",
+      "paths": [
+        "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\figures\\final\\07_roc_vgg16.png",
+        "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\figures\\final\\07_roc_vgg16.pdf"
+      ]
+    },
+    "08-09_calibration_MiniConvNet": {
+      "status": "ok",
+      "paths": [
+        "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\figures\\final\\08_calibration_miniconvnet.png",
+        "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\figures\\final\\08_calibration_miniconvnet.pdf"
+      ]
+    },
+    "08-09_calibration_VGG16": {
+      "status": "ok",
+      "paths": [
+        "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\figures\\final\\09_calibration_vgg16.png",
+        "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\figures\\final\\09_calibration_vgg16.pdf"
+      ]
+    },
+    "10_confidence_correctness": {
+      "status": "ok",
+      "paths": [
+        "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\figures\\final\\10_confidence_correctness.png",
+        "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\figures\\final\\10_confidence_correctness.pdf"
+      ]
+    },
+    "11_entropy_correctness": {
+      "status": "ok",
+      "paths": [
+        "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\figures\\final\\11_entropy_correctness.png",
+        "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\figures\\final\\11_entropy_correctness.pdf"
+      ]
+    },
+    "12_uncertainty_error": {
+      "status": "ok",
+      "paths": [
+        "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\figures\\final\\12_uncertainty_error.png",
+        "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\figures\\final\\12_uncertainty_error.pdf"
+      ]
+    },
+    "13-14_risk_coverage_MiniConvNet": {
+      "status": "ok",
+      "paths": [
+        "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\figures\\final\\13_risk_coverage_miniconvnet.png",
+        "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\figures\\final\\13_risk_coverage_miniconvnet.pdf"
+      ]
+    },
+    "13-14_risk_coverage_VGG16": {
+      "status": "ok",
+      "paths": [
+        "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\figures\\final\\14_risk_coverage_vgg16.png",
+        "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\figures\\final\\14_risk_coverage_vgg16.pdf"
+      ]
+    },
+    "15_internal_external_uncertainty": {
+      "status": "ok",
+      "paths": [
+        "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\figures\\final\\15_internal_external_uncertainty.png",
+        "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\figures\\final\\15_internal_external_uncertainty.pdf"
+      ]
+    },
+    "16_high_confidence_errors": {
+      "status": "ok",
+      "paths": [
+        "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\figures\\final\\16_high_confidence_errors.png",
+        "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\figures\\final\\16_high_confidence_errors.pdf"
+      ]
+    },
+    "17_gradcam_examples": {
+      "status": "ok",
+      "paths": [
+        "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\figures\\final\\17_gradcam_examples_gradcam.png",
+        "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\figures\\final\\17_gradcam_examples_gradcam.pdf"
+      ]
+    },
+    "18_gradcam_plusplus_examples": {
+      "status": "ok",
+      "paths": [
+        "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\figures\\final\\18_gradcam_examples_gradcam_plusplus.png",
+        "C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\figures\\final\\18_gradcam_examples_gradcam_plusplus.pdf"
+      ]
+    }
+  }
+}

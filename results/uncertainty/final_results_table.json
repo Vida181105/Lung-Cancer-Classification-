@@ -1,0 +1,40 @@
+[
+  {
+    "model":"MiniConvNet",
+    "parameters":499172,
+    "internal_accuracy_this_checkpoint":0.4952380952,
+    "internal_accuracy_source":"C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\results\\calibration\\calibration_metrics.csv (this checkpoint's own test-set accuracy)",
+    "internal_cv_headline_accuracy":0.705936,
+    "internal_cv_headline_std":0.119965,
+    "leakage_controlled_accuracy":0.7410464357,
+    "leakage_controlled_std":0.0424242589,
+    "leakage_controlled_note":"",
+    "external_accuracy":0.460593654,
+    "external_auc":0.5222687851,
+    "external_malignant_recall":0.0819964349,
+    "ece":0.165652165,
+    "brier_score":0.6570211857,
+    "mean_uncertainty_internal":0.8880824447,
+    "uncertainty_error_relationship":"higher entropy for incorrect (delta=+0.3541)",
+    "selective_prediction_performance":"at 80% coverage: error 53.9% -> 52.9%"
+  },
+  {
+    "model":"VGG16",
+    "parameters":14780868,
+    "internal_accuracy_this_checkpoint":0.7714285714,
+    "internal_accuracy_source":"C:\\Users\\shrey\\Downloads\\MIP_project_part2\\Lung-Cancer-Classification-\\Lung-Cancer-Classification-\\results\\calibration\\calibration_metrics.csv (this checkpoint's own test-set accuracy)",
+    "internal_cv_headline_accuracy":0.7714285714,
+    "internal_cv_headline_std":null,
+    "leakage_controlled_accuracy":null,
+    "leakage_controlled_std":null,
+    "leakage_controlled_note":"Leakage-controlled (Option B) 3-fold CV was run for MiniConvNet only - not attempted for baselines.",
+    "external_accuracy":0.5609007165,
+    "external_auc":0.6412398876,
+    "external_malignant_recall":0.3351158645,
+    "ece":0.0264909362,
+    "brier_score":0.3247387138,
+    "mean_uncertainty_internal":0.710644424,
+    "uncertainty_error_relationship":"higher entropy for incorrect (delta=+0.3033)",
+    "selective_prediction_performance":"at 80% coverage: error 43.9% -> 41.2%"
+  }
+]
